@@ -59,7 +59,7 @@ class VenvCtl:
         """Return virtualenv command."""
         return 'virtualenv --activators bash --copies'
 
-    def get_config(self):
+    def get_config(self) -> Any:
         """Get the venvs config file."""
         with open(self.config_file, 'r') as file:
             config = json.load(file)
@@ -67,18 +67,18 @@ class VenvCtl:
         return config
 
     @staticmethod
-    def parse_venvs(config) -> Tuple[Any, Any, Any]:
+    def parse_venvs(config: Any) -> Tuple[Any, Any, Any]:
         """Parse the venvs config file."""
-        base_venv = config["base"]
+        base_venv: Any = config["base"]
 
-        all_venvs = config["venvs"]
+        all_venvs: Any = config["venvs"]
 
         # regular venvs
-        regulars_venvs = [
+        regulars_venvs: Any = [
             venv for venv in all_venvs if venv["type"] == "regular"]
 
         # reserved to networking ops
-        networking_venvs = [
+        networking_venvs: Any = [
             venv for venv in all_venvs if venv["type"] == "networking"]
         return base_venv, regulars_venvs, networking_venvs
 
@@ -95,7 +95,7 @@ class VenvCtl:
         # virtualenv.make_environment_relocatable(venv_path)
         return install_report, install_errors, install_exitcode
 
-    def __create_base_venv(self, venv_packages: List[str]):
+    def __create_base_venv(self, venv_packages: List[str]) -> None:
         """Create a virtual environment with the shared packages."""
         subprocess.call(
             f'{self.python_binary} -m {self.__get_venv_cmd} {self.base_venv_path}',
@@ -121,7 +121,7 @@ class VenvCtl:
         return self.install_packages(venv_path, venv_packages)
 
     @staticmethod
-    def venv_audit(venv_path: Path):
+    def venv_audit(venv_path: Path) -> Tuple[str, str, str]:
         """Run audit against a specific virtual environment."""
         piphyperd = PipHyperd(python_path=Path(f'{venv_path}/bin/python3'))
 
@@ -132,13 +132,13 @@ class VenvCtl:
 
         return pip_freeze_report, pip_check_report, pip_outdated_report
 
-    def __generate_venvs(self, venvs):
+    def __generate_venvs(self, venvs: Any) -> None:
         for venv in venvs:
             install_report, install_errors, install_exitcode = self.__create_from_base(
-                f'{self.venvs_path}/{venv["name"]}', venv["packages"])
+                Path(f'{self.venvs_path}/{venv["name"]}'), venv["packages"])
 
             pip_freeze_report, pip_check_report, pip_outdated_report = self.venv_audit(
-                f'{self.venvs_path}/{venv["name"]}')
+                Path(f'{self.venvs_path}/{venv["name"]}'))
 
             build_report = tools.Tools().packer(
                 self.venvs_path, str(venv["name"]))
@@ -153,10 +153,10 @@ class VenvCtl:
             }
 
             reports.Reports().generate_reports(
-                f'{self.venvs_path}/reports',
+                Path(f'{self.venvs_path}/reports'),
                 venv["name"], reports_map, install_exitcode)
 
-    def run(self):
+    def run(self) -> None:
         """Run the virtual environments generation."""
         config = self.get_config()
         base_venv, regulars_venvs, networking_venvs = self.parse_venvs(
