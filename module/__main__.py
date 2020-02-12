@@ -1,6 +1,4 @@
-"""
-DO NOT REMOVE THIS
-"""
+"""DO NOT REMOVE THIS."""
 
 # import sys
 import os
