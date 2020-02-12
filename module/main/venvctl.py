@@ -110,8 +110,6 @@ class VenvCtl:
 
         content = re.sub(r'VIRTUAL_ENV\s*=(.*)', self.__get_bash_activation_fix, content)
 
-        print(content)
-
         with open(f'{self.base_venv_path}/bin/activate', 'w') as activate_file:
             activate_file.write(content)
 
