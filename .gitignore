@@ -80,3 +80,6 @@ venvs/
 # symlinks
 venvctl
 # find . -type l | sed -e s'/^\.\///g' >> .gitignore
+
+# venvs folder
+python-venvs/*
