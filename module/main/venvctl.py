@@ -19,7 +19,7 @@ import os
 import json
 import subprocess
 from pathlib import Path
-from typing import Any, List, Tuple, Dict
+from typing import Any, List, Tuple, Dict, Optional
 import shutil
 import re
 from piphyperd import PipHyperd
@@ -34,12 +34,14 @@ class VenvCtl:
     """
 
     def __init__(self, config_file: Path,
+                 output_dir: Optional[Path] = None,
                  python_binary: Path = Path("/usr/local/bin/python3.8")):
-        """Init the venvctl providing a venvs {config_path}."""
+        """Init the venvctl providing a venvs {config_path} and an {output_dir}."""
         # venvs config file
         self.config_file: Path = Path(config_file)
         # venvs base dir
-        self.venvs_path = Path(f'{os.getcwd()}/python-venvs')
+        default_dir = Path(f'{os.getcwd()}/python-venvs')
+        self.venvs_path: Path = Path(output_dir) if output_dir else default_dir
         # path of the base venv
         self.base_venv_path = Path(f'{self.venvs_path}/base')
         # path to the python binary to use
