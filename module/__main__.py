@@ -2,14 +2,11 @@
 DO NOT REMOVE THIS
 """
 
-import sys
+# import sys
 import os
-
-PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), './main'))
-if not PATH in sys.path:
-    sys.path.insert(1, PATH)
-    from .main.venvctl import VenvCtl
-del PATH
+from pathlib import Path
+from .main.venvctl import VenvCtl
 
 if __name__ == '__main__':
-    sys.exit(VenvCtl())
+    VenvCtl(
+        config_file=Path(f'{os.getcwd()}/module/tests/config/venvs.json')).run()
