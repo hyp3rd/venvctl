@@ -1,13 +1,13 @@
-"""
-THIS SOFTWARE IS PROVIDED AS IS
-and under GNU General Public License. <https://www.gnu.org/licenses/gpl-3.0.en.html>
+"""THIS SOFTWARE IS PROVIDED AS IS.
+
+Released under GNU General Public License:
+<https://www.gnu.org/licenses/gpl-3.0.en.html>
+
 USE IT AT YOUR OWN RISK.
 
 Reports is a python object to dinamically generate markdown reports.
-
-This module is part of VenvCtl, published on PyPi <https://pypi.org/project/venvctl/>.
-
-The code is available on GitLab <https://gitlab.com/hyperd/venvctl>.
+This module is part of VenvCtl: <https://pypi.org/project/venvctl/>.
+The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 """
 
 import time
@@ -18,13 +18,11 @@ from markd import Markdown
 
 
 class Reports:
-    """
-    Reports helper.
-    """
+    """Reports helper."""
 
     @staticmethod
     def report_builder(report_title: str, report_body: str) -> UserDict:
-        """ generate a report object """
+        """Generate a report object."""
         report: UserDict = UserDict()
         report['title'] = report_title
         report['output'] = report_body
@@ -32,8 +30,9 @@ class Reports:
         return report
 
     @staticmethod
-    def generate_report(reports_path: Path, venv_name: str, reports: List[UserDict], exitcode: int):
-        """ generates markdown reports """
+    def generate_report(reports_path: Path, venv_name: str,
+                        reports: List[UserDict], exitcode: int):
+        """Generate markdown reports."""
         generated_at = time.strftime("%Y:%M:%d - %H:%M")
 
         markd = Markdown()
@@ -52,7 +51,7 @@ class Reports:
     @classmethod
     def generate_reports(cls, reports_path: Path, venv_name: str,
                          reports: Dict[str, str], exitcode: int):
-        """ parse and generate reports """
+        """Parse and generate reports."""
         all_reports = list()
         for key, val in reports.items():
             all_reports.append(cls.report_builder(

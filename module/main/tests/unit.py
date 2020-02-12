@@ -1,13 +1,14 @@
-"""
-THIS SOFTWARE IS PROVIDED AS IS
-and under GNU General Public License. <https://www.gnu.org/licenses/gpl-3.0.en.html>
+"""THIS SOFTWARE IS PROVIDED AS IS.
+
+Released under GNU General Public License:
+<https://www.gnu.org/licenses/gpl-3.0.en.html>
+
 USE IT AT YOUR OWN RISK.
 
-PipHyperd unit testing.
+VenvCtl unit testing.
 
-The module is published on PyPi <https://pypi.org/project/piphyperd/>.
-
-The code is available on GitLab <https://gitlab.com/hyperd/piphyperd>.
+This module is part of VenvCtl: <https://pypi.org/project/venvctl/>.
+The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 """
 
 import unittest
@@ -23,41 +24,31 @@ del PATH
 
 
 class TestMethods(unittest.TestCase):
-
-    """
-    PipHyperd unit testing class
-    """
+    """VenvCtl unit testing class."""
 
     def setUp(self):
-        """
-        tests setup
-        """
-        self.venvctl = VenvCtl(config_file="/Users/dy14uc/Developer/gitlab.com/venvctl/module/main/tests/config/venvs.json")
+        """Tests setup."""
+        self.venvctl = VenvCtl(
+            config_file=f'{os.getcwd()}/module/main/tests/config/venvs.json')
 
     def tearDown(self):
-        """
-        Remove test venv after testing
-        """
+        """Remove test venv after testing."""
         self.wiper(self.venvctl.base_venv_path)
 
     def test_is_not_none(self):
-        """
-        Assert that PipHyperd is not None
-        """
+        """Assert that venvctl is not None."""
         self.assertIsNotNone(self.venvctl)
 
     def test_all(self):
+        """Assert that base_venv_path exists."""
         self.venvctl.run()
 
         test = os.path.isdir(self.venvctl.base_venv_path)
-
         self.assertTrue(test)
 
     @staticmethod
     def wiper(folder):
-        """
-        Helper function to clean up folders generated during the tests
-        """
+        """Clean up folders generated during the tests."""
         if os.path.isdir(folder):
             shutil.rmtree(folder)
 
