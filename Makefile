@@ -1,9 +1,8 @@
 # --------------------------------------------------------------------
-# There should be no need to change this,
-# if you do you'll also need to update docker-compose.yml
+# There should be no need to change this
 # --------------------------------------------------------------------
 
-SERVICE_TARGET := pyshipper
+# SERVICE_TARGET := pyshipper
 
 # If you see pwd_unknown showing up, this is why. Re-calibrate your system.
 PWD ?= pwd_unknown
@@ -14,40 +13,12 @@ MODULE_NAME = \
 MODULE_VERSION = \
 	$(shell awk -F= '/^VERSION\ ?=/{gsub(/\47|"/, "", $$NF);print $$NF;exit}' variables)
 
-# if vars not set specifially: try default to environment, else fixed value.
-# strip to ensure spaces are removed in future editorial mistakes.
-# tested to work consistently on popular Linux flavors and Mac.
-ifeq ($(user),)
-# USER retrieved from env, UID from shell.
-HOST_USER ?= $(strip $(if $(USER),$(USER),nodummy))
-HOST_UID ?= $(strip $(if $(shell id -u),$(shell id -u),4000))
-else
-# allow override by adding user= and/ or uid=  (lowercase!).
-# uid= defaults to 0 if user= set (i.e. root).
-HOST_USER = $(user)
-HOST_UID = $(strip $(if $(uid),$(uid),0))
-endif
-
-# cli prefix for commands to run in container
-RUN_DOCK = \
-	docker-compose -p $(MODULE_NAME)_$(HOST_UID) run --rm $(SERVICE_TARGET) sh -l -c
-
 # export such that its passed to shell functions for Docker to pick up.
 export MODULE_NAME
-export HOST_USER
-export HOST_UID
-
-
-
-.PHONY: shell
-shell:
-	$(RUN_DOCK) "cd ~/$(MODULE_NAME) \
-		&& ([ -d "$(MODULE_NAME)" ] || ln -sf module "$(MODULE_NAME)") \
-		&& bash"
 
 .PHONY: fork
 FILES = \
-	module files Makefile Dockerfile docker-compose.yml setup.py MANIFEST.in variables .gitignore .pylintrc
+	module files Makefile setup.py MANIFEST.in variables .gitignore .pylintrc
 DEST ?= $(dest)
 fork:
 ifeq ($(DEST),)
