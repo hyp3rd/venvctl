@@ -64,7 +64,7 @@ class VenvCtl:
         """Return virtualenv command."""
         return 'virtualenv --activators bash --copies'
 
-    def __get_config(self):
+    def get_config(self):
         """Get the venvs config file."""
         with open(self.config_file, 'r') as file:
             config = json.load(file)
@@ -72,7 +72,7 @@ class VenvCtl:
         return config
 
     @staticmethod
-    def __parse_venvs(config) -> Tuple[Any, Any, Any]:
+    def parse_venvs(config) -> Tuple[Any, Any, Any]:
         """Parse the venvs config file."""
         base_venv = config["base"]
 
@@ -163,8 +163,8 @@ class VenvCtl:
 
     def run(self):
         """Run the virtual environments generation."""
-        config = self.__get_config()
-        base_venv, regulars_venvs, networking_venvs = self.__parse_venvs(
+        config = self.get_config()
+        base_venv, regulars_venvs, networking_venvs = self.parse_venvs(
             config)
         self.__create_base_venv(base_venv)
 
