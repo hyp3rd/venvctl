@@ -21,6 +21,7 @@ import subprocess
 from pathlib import Path
 from typing import Any, List, Tuple, Dict
 import shutil
+import re
 from piphyperd import PipHyperd
 from ..utils import reports, tools
 
@@ -107,8 +108,9 @@ class VenvCtl:
         with open(f'{self.base_venv_path}/bin/activate', 'r') as activate_file:
             content = activate_file.read()
 
-        content = content.replace(f"VIRTUAL_ENV='{self.base_venv_path}'",
-                                  self.__get_bash_activation_fix)
+        content = re.sub(r'VIRTUAL_ENV\s*=(.*)', self.__get_bash_activation_fix, content)
+
+        print(content)
 
         with open(f'{self.base_venv_path}/bin/activate', 'w') as activate_file:
             activate_file.write(content)
