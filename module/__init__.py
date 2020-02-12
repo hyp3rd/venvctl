@@ -1,2 +1,2 @@
 """DO NOT REMOVE THIS."""
-import venvctl
+from .main.venvctl import VenvCtl
