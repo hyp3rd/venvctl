@@ -14,7 +14,7 @@ The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 """
 
 
-import sys
+# import sys
 import os
 import json
 import subprocess
@@ -22,13 +22,7 @@ from pathlib import Path
 from typing import Any, List, Tuple, Dict
 import shutil
 from piphyperd import PipHyperd
-
-PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir))
-print(PATH)
-if PATH not in sys.path:
-    sys.path.insert(1, PATH)
-    from utils import reports, tools
-del PATH
+from ..utils import reports, tools
 
 
 class VenvCtl:
