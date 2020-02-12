@@ -43,12 +43,12 @@ class TestMethods(unittest.TestCase):
         return "VIRTUAL_ENV=$(cd $(dirname '$BASH_SOURCE'); dirname `pwd`)"
 
     @staticmethod
-    def wiper(folder):
+    def wiper(folder_path: Path) -> None:
         """Clean up folders generated during the tests."""
-        if os.path.isdir(folder):
-            shutil.rmtree(folder)
+        if os.path.isdir(folder_path):
+            shutil.rmtree(folder_path)
 
-    def setUp(self):
+    def setUp(self) -> None:
         """Test setup."""
         self.venvctl = VenvCtl(
             config_file=self.get_config_file())
@@ -57,18 +57,18 @@ class TestMethods(unittest.TestCase):
     #     """Remove test venv after testing."""
     #     self.wiper(self.get_venv_base_path())
 
-    def test_a_is_not_none(self):
+    def test_a_is_not_none(self) -> None:
         """Assert that venvctl is not None."""
         self.assertIsNotNone(self.venvctl)
 
-    def test_b_create_all(self):
+    def test_b_create_all(self) -> None:
         """Assert that base_venv_path exists."""
         self.venvctl.run()
 
         test = os.path.isdir(self.venvctl.base_venv_path)
         self.assertTrue(test)
 
-    def test_c_activate_fix(self):
+    def test_c_activate_fix(self) -> None:
         """Assert that the bash activate fix is applied."""
         config = self.venvctl.get_config()
         _, regulars_venvs, networking_venvs = self.venvctl.parse_venvs(
@@ -84,7 +84,7 @@ class TestMethods(unittest.TestCase):
 
                 self.assertTrue(verify)
 
-    def test_d_packages(self):
+    def test_d_packages(self) -> None:
         """Assert that the expected packages are listed in each venv."""
         config = self.venvctl.get_config()
 
@@ -95,7 +95,7 @@ class TestMethods(unittest.TestCase):
 
         for venv in all_venvs:
             pip_freeze_report, _, _ = self.venvctl.venv_audit(
-                f'{self.get_venv_base_path()}/{venv["name"]}')
+                Path(f'{self.get_venv_base_path()}/{venv["name"]}'))
             for package in venv['packages']:
                 self.assertIn(package, pip_freeze_report)
 
