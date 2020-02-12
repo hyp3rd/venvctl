@@ -12,16 +12,12 @@ The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 """
 
 import unittest
-import sys
+# import sys
 import os
 import shutil
 from pathlib import Path
 
-PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-if PATH not in sys.path:
-    sys.path.insert(1, PATH)
-    from venvctl import VenvCtl
-del PATH
+from ..main.venvctl import VenvCtl
 
 
 class TestMethods(unittest.TestCase):
@@ -30,16 +26,21 @@ class TestMethods(unittest.TestCase):
     @staticmethod
     def get_config_file() -> Path:
         """Return the config file path."""
-        return Path(f'{os.getcwd()}/module/main/tests/config/venvs.json')
+        return Path(f'{os.getcwd()}/module/tests/config/venvs.json')
+
+    @staticmethod
+    def get_venv_base_path() -> Path:
+        """Return the venv base folder path."""
+        return Path(f'{os.getcwd()}/python-venvs')
 
     def setUp(self):
         """Test setup."""
         self.venvctl = VenvCtl(
             config_file=self.get_config_file())
 
-    def tearDown(self):
-        """Remove test venv after testing."""
-        self.wiper(self.venvctl.base_venv_path)
+    # def tearDown(self):
+    #     """Remove test venv after testing."""
+    #     self.wiper(self.get_venv_base_path())
 
     def test_is_not_none(self):
         """Assert that venvctl is not None."""
@@ -58,16 +59,16 @@ class TestMethods(unittest.TestCase):
 
         _, regulars_venvs, networking_venvs = self.venvctl.parse_venvs(
             config)
-        venv_base_path = f'{os.getcwd()}/python-venvs'
+
         for venv in regulars_venvs:
             pip_freeze_report, _, _ = self.venvctl.venv_audit(
-                f'{venv_base_path}/{venv["name"]}')
+                f'{self.get_venv_base_path()}/{venv["name"]}')
             for package in venv['packages']:
                 self.assertIn(package, pip_freeze_report)
 
         for venv in networking_venvs:
             pip_freeze_report, _, _ = self.venvctl.venv_audit(
-                f'{venv_base_path}/{venv["name"]}')
+                f'{self.get_venv_base_path()}/{venv["name"]}')
             for package in venv['packages']:
                 self.assertIn(package, pip_freeze_report)
 
