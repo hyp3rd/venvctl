@@ -13,7 +13,7 @@ The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 import time
 from pathlib import Path
 from typing import Dict, List
-from collections import UserDict
+# from collections import UserDict
 from markd import Markdown
 
 
@@ -21,9 +21,10 @@ class Reports:
     """Reports helper."""
 
     @staticmethod
-    def report_builder(report_title: str, report_body: str) -> UserDict:
+    def report_builder(report_title: str,
+                       report_body: str) -> Dict[str, str]:
         """Generate a report object."""
-        report: UserDict = UserDict()
+        report: Dict[str, str] = dict()
         report['title'] = report_title
         report['output'] = report_body
 
@@ -31,7 +32,7 @@ class Reports:
 
     @staticmethod
     def generate_report(reports_path: Path, venv_name: str,
-                        reports: List[UserDict], exitcode: int):
+                        reports: List[Dict[str, str]], exitcode: int) -> None:
         """Generate markdown reports."""
         generated_at = time.strftime("%Y:%M:%d - %H:%M")
 
@@ -50,7 +51,7 @@ class Reports:
 
     @classmethod
     def generate_reports(cls, reports_path: Path, venv_name: str,
-                         reports: Dict[str, str], exitcode: int):
+                         reports: Dict[str, str], exitcode: int) -> None:
         """Parse and generate reports."""
         all_reports = list()
         for key, val in reports.items():
