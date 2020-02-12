@@ -33,6 +33,21 @@ class TestMethods(unittest.TestCase):
         """Return the venv base folder path."""
         return Path(f'{os.getcwd()}/python-venvs')
 
+    @staticmethod
+    def get_bash_activation_fix() -> str:
+        """FIX the bashvenv activation. WARNING.
+
+        If you have any bash profile customization
+        at the `cd` command, this fix will breake.
+        """
+        return "VIRTUAL_ENV=$(cd $(dirname '$BASH_SOURCE'); dirname `pwd`)"
+
+    @staticmethod
+    def wiper(folder):
+        """Clean up folders generated during the tests."""
+        if os.path.isdir(folder):
+            shutil.rmtree(folder)
+
     def setUp(self):
         """Test setup."""
         self.venvctl = VenvCtl(
@@ -42,41 +57,47 @@ class TestMethods(unittest.TestCase):
     #     """Remove test venv after testing."""
     #     self.wiper(self.get_venv_base_path())
 
-    def test_is_not_none(self):
+    def test_a_is_not_none(self):
         """Assert that venvctl is not None."""
         self.assertIsNotNone(self.venvctl)
 
-    def test_create_all(self):
+    def test_b_create_all(self):
         """Assert that base_venv_path exists."""
         self.venvctl.run()
 
         test = os.path.isdir(self.venvctl.base_venv_path)
         self.assertTrue(test)
 
-    def test_packages_status(self):
+    def test_c_activate_fix(self):
+        """Assert that the bash activate fix is applied."""
+        config = self.venvctl.get_config()
+        _, regulars_venvs, networking_venvs = self.venvctl.parse_venvs(
+            config)
+
+        all_venvs = regulars_venvs + networking_venvs
+
+        for venv in all_venvs:
+            __path = f'{self.get_venv_base_path()}/{venv["name"]}'
+            print(__path)
+            with open(f'{__path}/bin/activate', 'r') as file:
+                verify = (self.get_bash_activation_fix() in file.read())
+
+                self.assertTrue(verify)
+
+    def test_d_packages(self):
         """Assert that the expected packages are listed in each venv."""
         config = self.venvctl.get_config()
 
         _, regulars_venvs, networking_venvs = self.venvctl.parse_venvs(
             config)
 
-        for venv in regulars_venvs:
+        all_venvs = regulars_venvs + networking_venvs
+
+        for venv in all_venvs:
             pip_freeze_report, _, _ = self.venvctl.venv_audit(
                 f'{self.get_venv_base_path()}/{venv["name"]}')
             for package in venv['packages']:
                 self.assertIn(package, pip_freeze_report)
-
-        for venv in networking_venvs:
-            pip_freeze_report, _, _ = self.venvctl.venv_audit(
-                f'{self.get_venv_base_path()}/{venv["name"]}')
-            for package in venv['packages']:
-                self.assertIn(package, pip_freeze_report)
-
-    @staticmethod
-    def wiper(folder):
-        """Clean up folders generated during the tests."""
-        if os.path.isdir(folder):
-            shutil.rmtree(folder)
 
 
 if __name__ == '__main__':
