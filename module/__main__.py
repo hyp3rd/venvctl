@@ -11,7 +11,7 @@ from .main.venvctl import VenvCtl
 def run(config: str, out: Optional[str] = None) -> None:
     """
     A program that generates virtual environments
-    and reports based on a predefined configuration.
+    and corresponding reports, based on a predefined configuration.
     """
     config_file = Path(config)
     output_dir = Path(out) if out else None
