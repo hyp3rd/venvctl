@@ -12,4 +12,3 @@ Tools is a helper object.
 This module is part of VenvCtl: <https://pypi.org/project/venvctl/>.
 The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 """
-import module.main.venvctl
