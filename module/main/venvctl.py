@@ -100,7 +100,7 @@ class VenvCtl:
     def __create_base_venv(self, venv_packages: List[str]) -> None:
         """Create a virtual environment with the shared packages."""
         subprocess.call(
-            f'{self.python_binary} -m {self.__get_venv_cmd} {self.base_venv_path}', a
+            f'{self.python_binary} -m {self.__get_venv_cmd} {self.base_venv_path}',
             shell=True)
         # virtualenv.create_environment(
         #     home_dir=self.base_venv_path, symlink=False)
