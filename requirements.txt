@@ -1,3 +1,4 @@
 piphyperd==1.5.5
-markd==0.1.13
+markd==0.1.19
 virtualenv==20.0.2
+click==7.0
