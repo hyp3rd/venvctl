@@ -55,7 +55,7 @@ class VenvCtl:
         If you have any bash profile customization
         at the `cd` command, this fix will breake.
         """
-        return "VIRTUAL_ENV=$(cd $(dirname '$BASH_SOURCE'); dirname `pwd`)"
+        return 'VIRTUAL_ENV=$(cd $(dirname "$BASH_SOURCE"); dirname `pwd`)'
 
     @property
     def __get_venv_cmd(self) -> str:
