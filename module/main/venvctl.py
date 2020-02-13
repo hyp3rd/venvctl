@@ -16,6 +16,7 @@ The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 
 # import sys
 import os
+import sys
 import json
 import subprocess
 from pathlib import Path
@@ -35,7 +36,7 @@ class VenvCtl:
 
     def __init__(self, config_file: Path,
                  output_dir: Optional[Path] = None,
-                 python_binary: Path = Path("/usr/local/bin/python3.8")):
+                 python_binary: Path = None) -> None:
         """Init the venvctl providing a venvs {config_path} and an {output_dir}."""
         # venvs config file
         self.config_file: Path = Path(config_file)
@@ -45,7 +46,7 @@ class VenvCtl:
         # path of the base venv
         self.base_venv_path = Path(f'{self.venvs_path}/base')
         # path to the python binary to use
-        self.python_binary = python_binary
+        self.python_binary = python_binary if python_binary else sys.executable
 
     @property
     def __get_bash_activation_fix(self) -> str:
