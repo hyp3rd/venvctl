@@ -23,6 +23,7 @@ from pathlib import Path
 from typing import Any, List, Tuple, Dict, Optional
 import shutil
 import re
+import virtualenv
 from piphyperd import PipHyperd
 from ..utils import reports, tools
 
@@ -90,12 +91,13 @@ class VenvCtl:
                          venv_packages: List[str]) -> Tuple[str, str, int]:
         """Install packages within a specific virtual environment."""
         subprocess.call('source {}/bin/activate'.format(venv_path), shell=True)
-        piphyperd = PipHyperd(python_path=Path(f'{venv_path}/bin/python3'))
+        # piphyperd = PipHyperd(python_path=Path(f'{venv_path}/bin/python3'))
 
-        install_report, install_errors, install_exitcode = piphyperd.install(
+        install_report, install_errors, install_exitcode = PipHyperd().install(
             *venv_packages)
 
         # virtualenv.make_environment_relocatable(venv_path)
+
         return install_report, install_errors, install_exitcode
 
     def __create_base_venv(self, venv_packages: List[str]) -> None:
@@ -121,6 +123,7 @@ class VenvCtl:
                            venv_packages: List[str]) -> Tuple[str, str, int]:
         shutil.copytree(src=self.base_venv_path, dst=venv_path)
         # virtualenv.copy_file_or_folder(self.base_venv_path, venv_path)
+
         return self.install_packages(venv_path, venv_packages)
 
     @staticmethod
