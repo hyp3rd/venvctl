@@ -11,9 +11,10 @@ A python package to manage virtual enviroments programmatically and using CLI.
 Packages dependency for the usage of `Venvctl`
 
 ```text
-piphyperd==1.3.3
-markd==0.1.13
-virtualenv==20.0.2
+piphyperd==1.5.5
+markd==0.1.19
+virtualenv==20.0.3
+click==7.0
 ```
 
 ## Installation
