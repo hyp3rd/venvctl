@@ -62,4 +62,5 @@ setuptools.setup(
         'Topic :: Software Development :: Libraries',
         'Environment :: Plugins',
     ],
+    zip_safe=False,
 )
