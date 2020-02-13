@@ -91,9 +91,9 @@ class VenvCtl:
                          venv_packages: List[str]) -> Tuple[str, str, int]:
         """Install packages within a specific virtual environment."""
         subprocess.call('source {}/bin/activate'.format(venv_path), shell=True)
-        piphyperd = PipHyperd(python_path=Path(f'{venv_path}/bin/python3'))
+        # piphyperd = PipHyperd(python_path=Path(f'{venv_path}/bin/python3'))
 
-        install_report, install_errors, install_exitcode = piphyperd.install(
+        install_report, install_errors, install_exitcode = PipHyperd().install(
             *venv_packages)
 
         # virtualenv.make_environment_relocatable(venv_path)
