@@ -2,8 +2,8 @@
 image: python:latest
 
 include:
-  - local: .gitlab/ci/Dependency-Scanning.gitlab-ci.yml
-  - local: .gitlab/ci/SAST.gitlab-ci.yml
+  - template: Dependency-Scanning.gitlab-ci.yml
+  - template: SAST.gitlab-ci.yml
 
 variables:
   build_cache: ${CI_PROJECT_DIR}/build_cache
