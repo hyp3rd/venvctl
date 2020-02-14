@@ -47,6 +47,7 @@ code_quality:
     - mypy --strict module/tests/unit.py
     - mypy --strict module/utils/reports.py
     - mypy --strict module/utils/tools.py
+    - mypy --strict module/cli/main.py
   allow_failure: true
 
 unit:

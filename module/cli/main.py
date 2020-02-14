@@ -41,7 +41,7 @@ def getversion() -> str:
 
 @click.version_option(version=getversion())
 @click.group()
-def cli():
+def cli() -> None:
     """Implement the default CLI group."""
 
 
@@ -67,7 +67,7 @@ def generate(config: str,
             output_dir=output_dir).run()
 
 
-def run():
+def run() -> None:
     """Run the CLI."""
     try:
         cli()  # pylint: disable=no-value-for-parameter
