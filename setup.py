@@ -52,7 +52,8 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     packages=[
         envstring("NAME"), envstring("NAME") + ".main",
-        envstring("NAME"), envstring("NAME") + ".utils"
+        envstring("NAME"), envstring("NAME") + ".utils",
+        envstring("NAME"), envstring("NAME") + ".cli"
     ],
     classifiers=[
         'Operating System :: OS Independent',
