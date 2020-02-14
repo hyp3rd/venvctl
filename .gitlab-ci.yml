@@ -11,6 +11,7 @@ variables:
   DS_PIP_VERSION: "20.0.2"
   PIP_REQUIREMENTS_FILE: requirements.txt
   SAST_DEFAULT_ANALYZERS: "bandit"
+  SAST_DISABLE_DIND: "true"
 
 cache:
   paths:
