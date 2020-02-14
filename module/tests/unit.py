@@ -15,8 +15,11 @@ import unittest
 import os
 import shutil
 from pathlib import Path
-
+from typing import Any
+import glob
+from binaryornot.check import is_binary
 from ..main.venvctl import VenvCtl
+from ..utils import utils
 
 
 class TestMethods(unittest.TestCase):
@@ -47,6 +50,10 @@ class TestMethods(unittest.TestCase):
         if os.path.isdir(folder_path):
             shutil.rmtree(folder_path)
 
+    def get_venvs_config(self) -> Any:
+        """Get the venvs config file."""
+        return self.venvctl.get_config()
+
     def setUp(self) -> None:
         """Test setup."""
         self.venvctl = VenvCtl(
@@ -56,42 +63,47 @@ class TestMethods(unittest.TestCase):
         """Assert that venvctl is not None."""
         self.assertIsNotNone(self.venvctl)
 
-    def test_b_create_all(self) -> None:
+    def test_b_config_is_not_none(self) -> None:
+        """Assert that the config file is not None."""
+        self.assertIsNotNone(self.get_config_file())
+
+    def test_c_create_all(self) -> None:
         """Assert that base_venv_path exists."""
         self.venvctl.run()
 
         test = os.path.isdir(self.get_venv_base_path())
         self.assertTrue(test)
 
-    def test_c_activate_fix(self) -> None:
+    def test_d_venv_integrity(self) -> None:
+        """Assert that each venv contains the expected packages."""
+        for venv in self.get_venvs_config():
+            pip_freeze_report, _, _ = self.venvctl.audit(
+                Path(f'{self.get_venv_base_path()}/{venv["name"]}'))
+            for package in venv['packages']:
+                self.assertIn(package, pip_freeze_report)
+
+    def test_e_activate_fix(self) -> None:
         """Assert that the bash activate fix is applied."""
-        all_venvs = self.venvctl.get_config()
-        # _, regulars_venvs, networking_venvs = self.venvctl.parse_venvs(
-        #     config)
-
-        # all_venvs = regulars_venvs + networking_venvs
-
-        for venv in all_venvs:
+        for venv in self.get_venvs_config():
             current_path = f'{self.get_venv_base_path()}/{venv["name"]}'
             with open(f'{current_path}/bin/activate', 'r') as file:
                 verify = (self.get_bash_activation_fix() in file.read())
 
                 self.assertTrue(verify)
 
-    def test_d_packages(self) -> None:
-        """Assert that the expected packages are listed in each venv."""
-        all_venvs = self.venvctl.get_config()
-
-        # _, regulars_venvs, networking_venvs = self.venvctl.parse_venvs(
-        #     config)
-
-        # all_venvs = regulars_venvs + networking_venvs
-
-        for venv in all_venvs:
-            pip_freeze_report, _, _ = self.venvctl.audit(
-                Path(f'{self.get_venv_base_path()}/{venv["name"]}'))
-            for package in venv['packages']:
-                self.assertIn(package, pip_freeze_report)
+    def test_f_shebang_fix(self) -> None:
+        """Assert that the shebang fix is applied."""
+        for venv in self.get_venvs_config():
+            target_path = f'{self.get_venv_base_path()}/{venv["name"]}/bin'
+            for child in glob.glob(
+                    f'{target_path}/**/easy*', recursive=True):
+                if os.path.isdir(child) or is_binary(str(child)):
+                    pass
+                else:
+                    with open(child, 'r') as python_file:
+                        verify = (utils.Helpers().get_shebang_fix()
+                                  in python_file.read())
+                        self.assertTrue(verify, "The shebang fix is present.")
 
 
 if __name__ == '__main__':

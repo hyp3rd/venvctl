@@ -20,11 +20,11 @@ from pathlib import Path
 from binaryornot.check import is_binary
 
 
-class Tools:
+class Helpers:
     """Tools and Utils."""
 
     @staticmethod
-    def __get_shebang_fix() -> str:
+    def get_shebang_fix() -> str:
         """FIX: the shebang in python files."""
         return '#!/usr/bin/env python'
 
@@ -42,7 +42,7 @@ class Tools:
                     content = python_file.read()
 
                 content = re.sub(r'#!(.*)/python.*',
-                                 cls.__get_shebang_fix(), content)
+                                 cls.get_shebang_fix(), content)
 
                 with open(child, 'w') as python_file:
                     python_file.write(content)
