@@ -31,10 +31,10 @@ class Tools:
     @classmethod
     def shebang_fixer(cls, venv_path: str, target_dir: str) -> None:
         """Fix the shebang path in any python file."""
-        venv_path = f'{os.getcwd()}/{venv_path}/{target_dir}'
+        target_path = f'{venv_path}/{target_dir}'
 
         for child in glob.glob(
-                f'{venv_path}/**/*', recursive=True):
+                f'{target_path}/**/*', recursive=True):
             if os.path.isdir(child) or is_binary(str(child)):
                 pass
             else:
