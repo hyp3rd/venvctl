@@ -1,8 +1,14 @@
 ---
 image: python:latest
 
+include:
+  - template: Dependency-Scanning.gitlab-ci.yml
+
 variables:
   build_cache: ${CI_PROJECT_DIR}/build_cache
+  DS_PYTHON_VERSION: 3
+  DS_PIP_VERSION: "20.0.2"
+  PIP_REQUIREMENTS_FILE: requirements.txt
 cache:
   paths:
     - ${CI_PROJECT_DIR}/build_cache
