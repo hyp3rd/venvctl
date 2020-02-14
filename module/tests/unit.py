@@ -12,7 +12,6 @@ The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 """
 
 import unittest
-# import sys
 import os
 import shutil
 from pathlib import Path
@@ -77,9 +76,8 @@ class TestMethods(unittest.TestCase):
         all_venvs = regulars_venvs + networking_venvs
 
         for venv in all_venvs:
-            __path = f'{self.get_venv_base_path()}/{venv["name"]}'
-            print(__path)
-            with open(f'{__path}/bin/activate', 'r') as file:
+            current_path = f'{self.get_venv_base_path()}/{venv["name"]}'
+            with open(f'{current_path}/bin/activate', 'r') as file:
                 verify = (self.get_bash_activation_fix() in file.read())
 
                 self.assertTrue(verify)
