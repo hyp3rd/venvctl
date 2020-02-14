@@ -10,12 +10,33 @@ The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 """
 
 from pathlib import Path
+import os
 from typing import Optional
 import click
 from ..main.venvctl import VenvCtl
 
+def getversion() -> str:
+    """Get version from variables file."""
+    varsfile = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'variables'))
+    version = """
+    Could not determine version.
+    Are you sure a `variables` file exists in the root folder?
+    """
+    if os.path.isfile(varsfile):
+        try:
+            with open("variables", "r") as file:
+                variables = file.read().strip().split("\n")
+            for variable in variables:
+                key, value = variable.split("=")
+                if key == "VERSION":
+                    version = value
+                    break
+        except FileNotFoundError:
+            pass
+    return version
 
-@click.version_option()
+
+@click.version_option(version=getversion())
 @click.group()
 def cli():
     """Default CLI group."""
