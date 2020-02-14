@@ -8,13 +8,10 @@ USE IT AT YOUR OWN RISK.
 VenvCtl is a python object to leverage virtual environments programmatically.
 VenvCtl is a wrapper around virtualenv.
 
-Tools is a helper object.
 This module is part of VenvCtl: <https://pypi.org/project/venvctl/>.
 The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 """
 
-
-# import sys
 import os
 import sys
 import json
@@ -24,7 +21,7 @@ from typing import Any, List, Tuple, Dict, Optional
 import shutil
 import re
 from piphyperd import PipHyperd
-from ..utils import reports, tools
+from ..utils import reports, utils
 
 
 class VenvCtl:
@@ -48,6 +45,8 @@ class VenvCtl:
         # venvs base dir
         default_dir = Path(f'{os.getcwd()}/python-venvs')
         self.venvs_path: Path = Path(output_dir) if output_dir else default_dir
+        # Initialize venvs
+        self.venvs: List[Any] = []
         # path to the python binary to use
         self.python_binary = python_binary if python_binary else sys.executable
         # Initialize venvs
@@ -90,7 +89,7 @@ class VenvCtl:
             *venv_packages)
 
         # Apply shebang fix to make the venv fully portable
-        tools.Tools.shebang_fixer(str(venv_path), "bin")
+        utils.Helpers().shebang_fixer(str(venv_path), "bin")
 
         return install_report, install_errors, exitcode
 
@@ -112,9 +111,9 @@ class VenvCtl:
                 return venv
         return None
 
-    def __do_create_venv(self, venv_path: Path,
-                         venv_packages: List[str],
-                         parent_venv_path: Optional[Path]) -> Tuple[str, str, int]:
+    def __create_venv(self, venv_path: Path,
+                      venv_packages: List[str],
+                      parent_venv_path: Optional[Path]) -> Tuple[str, str, int]:
         """Create virtual environment."""
         # If a parent is defined, clone it and install the extra packages
         if parent_venv_path is not None:
@@ -126,7 +125,8 @@ class VenvCtl:
             f'{self.python_binary} -m {self.__get_venv_cmd} {venv_path}',
             shell=True)
 
-        result = self.install_packages(venv_path, venv_packages)
+        install_report, install_errors, exitcode = self.install_packages(
+            venv_path, venv_packages)
 
         # Apply fix to /bin/activate
         with open(f'{venv_path}/bin/activate', 'r') as activate_file:
@@ -138,22 +138,22 @@ class VenvCtl:
         with open(f'{venv_path}/bin/activate', 'w') as activate_file:
             activate_file.write(content)
 
-        return result
+        return install_report, install_errors, exitcode
 
     def __generate_venv(self, venv: Any) -> None:
-        venvpath = Path(f'{self.venvs_path}/{venv["name"]}')
-        parent_venvpath = None
+        venv_path = Path(f'{self.venvs_path}/{venv["name"]}')
+        parent_venv_path = None
 
         if "parent" in venv:
-            parent_venvpath = Path(f'{self.venvs_path}/{venv["parent"]}')
+            parent_venv_path = Path(f'{self.venvs_path}/{venv["parent"]}')
 
-        install_report, install_errors, exitcode = self.__do_create_venv(
-            venvpath, venv["packages"], parent_venvpath)
+        install_report, install_errors, exitcode = self.__create_venv(
+            venv_path, venv["packages"], parent_venv_path)
 
         pip_freeze_report, pip_check_report, pip_outdated_report = self.audit(
             Path(f'{self.venvs_path}/{venv["name"]}'))
 
-        build_report = tools.Tools().packer(
+        build_report = utils.Helpers().packer(
             self.venvs_path, str(venv["name"]))
 
         reports_map: Dict[str, str] = {
@@ -174,15 +174,14 @@ class VenvCtl:
         for venv in venvs:
             # Eensure that the parent venv, if any, is present
             if "parent" in venv:
-                parentdir = f'{self.venvs_path}/{venv["parent"]}'
-                exists = os.path.exists(parentdir) and os.path.isdir(parentdir)
-                if not exists:
-                    parentvenv = self.__get_venv_by_name(venv["parent"])
-                    if parentvenv is None:
+                parent_dir = Path(f'{self.venvs_path}/{venv["parent"]}')
+                if not parent_dir.exists() and parent_dir.is_dir():
+                    parent_venv = self.__get_venv_by_name(venv["parent"])
+                    if parent_venv is None:
                         raise Exception(
                             "Invalid Virtual Environment configuration.")
                     # Generate the parent first
-                    self.__generate_venv(parentvenv)
+                    self.__generate_venv(parent_venv)
                 self.__generate_venv(venv)
             else:
                 self.__generate_venv(venv)
