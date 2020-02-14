@@ -13,7 +13,6 @@ The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 import time
 from pathlib import Path
 from typing import Dict, List
-# from collections import UserDict
 from markd import Markdown
 
 

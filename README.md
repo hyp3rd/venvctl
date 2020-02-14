@@ -1,5 +1,9 @@
 # Venvctl
 
+[![codecov](https://codecov.io/gl/hyperd/venvctl/branch/master/graph/badge.svg)](https://codecov.io/gl/hyperd/venvctl)
+
+[![pipeline status](https://gitlab.com/hyperd/venvctl/badges/master/pipeline.svg)](https://gitlab.com/hyperd/venvctl/-/commits/master)
+
 A python package to manage virtual enviroments programmatically and using CLI.
 
 ## Description
@@ -15,6 +19,7 @@ piphyperd==1.5.5
 markd==0.1.19
 virtualenv==20.0.3
 click==7.0
+binaryornot==0.4.4
 ```
 
 ## Installation
