@@ -2,10 +2,10 @@
 image: python:latest
 
 variables:
-  PIP_CACHE: ${CI_PROJECT_DIR}/pip_cache
+  build_cache: ${CI_PROJECT_DIR}/build_cache
 cache:
   paths:
-    - ${CI_PROJECT_DIR}/pip_cache
+    - ${CI_PROJECT_DIR}/build_cache
   key: ${CI_PROJECT_ID}
 
 services:
@@ -43,6 +43,13 @@ code_quality:
     - mypy --strict module/utils/tools.py
   allow_failure: true
 
+unit:
+  stage: test
+  extends: .pipelinesetup
+  script:
+    - python -m module generate --config ./module/tests/config/venvs.json --out ${CI_PROJECT_DIR}/build_cache/venvs_unit
+    - rm -rf ${CI_PROJECT_DIR}/build_cache/venvs_unit
+
 coverage:
   stage: test
   extends: .pipelinesetup
@@ -50,22 +57,24 @@ coverage:
     - pip3 install codecov
     - coverage run -m module.tests.unit
     - coverage report -m
+    - coverage html -d ${CI_PROJECT_DIR}/build_cache/tests/coverage
+    - bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
 
 build:
   stage: build
   extends: .pipelinesetup
   script:
-      - rm -rf ${CI_PROJECT_DIR}/pip_cache/venvs
+      - rm -rf ${CI_PROJECT_DIR}/build_cache/venvs
       - pip3 install --upgrade -r requirements.txt
       - pip3 install --upgrade venvctl
-      - python -m venvctl --config ./module/tests/config/venvs.json --out ${CI_PROJECT_DIR}/pip_cache/venvs
+      - python -m venvctl generate --config ./module/tests/config/venvs.json --out ${CI_PROJECT_DIR}/build_cache/venvs
   artifacts:
     paths:
-      - ${CI_PROJECT_DIR}/pip_cache/venvs
+      - ${CI_PROJECT_DIR}/build_cache/venvs
 
 .pipelinesetup:
   before_script:
-    - mkdir -p $PIP_CACHE
+    - mkdir -p $build_cache
     - pip3 install --upgrade pip
     - pip3 install -r requirements.txt
     - python --version
