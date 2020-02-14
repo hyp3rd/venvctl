@@ -2,13 +2,16 @@
 image: python:latest
 
 include:
-  - template: Dependency-Scanning.gitlab-ci.yml
+  - template: ./.gitlab/ci/Dependency-Scanning.gitlab-ci.yml
+  - template: ./.gitlab/ci/SAST.gitlab-ci.yml
 
 variables:
   build_cache: ${CI_PROJECT_DIR}/build_cache
   DS_PYTHON_VERSION: 3
   DS_PIP_VERSION: "20.0.2"
   PIP_REQUIREMENTS_FILE: requirements.txt
+  SAST_DEFAULT_ANALYZERS: "bandit"
+
 cache:
   paths:
     - ${CI_PROJECT_DIR}/build_cache
@@ -20,9 +23,6 @@ services:
 stages:
   - test
   - build
-# before_script:
-#   - apt-get update && apt-get install make
-#   - python3 --version
 
 pylint:
   stage: test
