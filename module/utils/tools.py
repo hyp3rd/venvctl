@@ -14,11 +14,39 @@ import os
 import tarfile
 import contextlib
 import io
+import re
+import glob
 from pathlib import Path
+from typing import List
+from binaryornot.check import is_binary
 
 
 class Tools:
     """Tools and Utils."""
+
+    @staticmethod
+    def __get_shebang_fix() -> str:
+        """FIX: the shebang in python files."""
+        return '#!/usr/bin/env python'
+
+    @classmethod
+    def shebang_fixer(cls, venv_path: str, target_dir: str) -> None:
+        """Fix the shebang path in any python file."""
+        venv_path = f'{os.getcwd()}/{venv_path}/{target_dir}'
+
+        for child in glob.glob(
+                f'{venv_path}/**/*', recursive=True):
+            if os.path.isdir(child) or is_binary(str(child)):
+                pass
+            else:
+                with open(child, 'r') as python_file:
+                    content = python_file.read()
+
+                content = re.sub(r'#!(.*)/python.*',
+                                 cls.__get_shebang_fix(), content)
+
+                with open(child, 'w') as python_file:
+                    python_file.write(content)
 
     @staticmethod
     def packer(venv_path: Path, venv_name: str) -> str:

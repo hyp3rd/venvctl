@@ -23,7 +23,6 @@ from pathlib import Path
 from typing import Any, List, Tuple, Dict, Optional
 import shutil
 import re
-import virtualenv
 from piphyperd import PipHyperd
 from ..utils import reports, tools
 
@@ -38,7 +37,12 @@ class VenvCtl:
     def __init__(self, config_file: Path,
                  output_dir: Optional[Path] = None,
                  python_binary: Path = None) -> None:
-        """Init the venvctl providing a venvs {config_path} and an {output_dir}."""
+        """
+        Init the venvctl.
+
+        config_path -- Path to the venvs config file)
+        output_dir -- Directory path to output the venvs artifacts
+        """
         # venvs config file
         self.config_file: Path = Path(config_file)
         # venvs base dir
@@ -93,12 +97,16 @@ class VenvCtl:
         subprocess.call('source {}/bin/activate'.format(venv_path), shell=True)
         # piphyperd = PipHyperd(python_path=Path(f'{venv_path}/bin/python3'))
 
-        install_report, install_errors, install_exitcode = PipHyperd().install(
+        piphyperd = PipHyperd(
+            python_path=Path(f'{venv_path}/bin/python3'))
+
+        install_report, install_errors, exitcode = piphyperd.install(
             *venv_packages)
 
+        tools.Tools.shebang_fixer(str(venv_path), "bin")
         # virtualenv.make_environment_relocatable(venv_path)
 
-        return install_report, install_errors, install_exitcode
+        return install_report, install_errors, exitcode
 
     def __create_base_venv(self, venv_packages: List[str]) -> None:
         """Create a virtual environment with the shared packages."""
@@ -127,7 +135,7 @@ class VenvCtl:
         return self.install_packages(venv_path, venv_packages)
 
     @staticmethod
-    def venv_audit(venv_path: Path) -> Tuple[str, str, str]:
+    def audit(venv_path: Path) -> Tuple[str, str, str]:
         """Run audit against a specific virtual environment."""
         piphyperd = PipHyperd(python_path=Path(f'{venv_path}/bin/python3'))
 
@@ -140,10 +148,10 @@ class VenvCtl:
 
     def __generate_venvs(self, venvs: Any) -> None:
         for venv in venvs:
-            install_report, install_errors, install_exitcode = self.__create_from_base(
+            install_report, install_errors, exitcode = self.__create_from_base(
                 Path(f'{self.venvs_path}/{venv["name"]}'), venv["packages"])
 
-            pip_freeze_report, pip_check_report, pip_outdated_report = self.venv_audit(
+            pip_freeze_report, pip_check_report, pip_outdated_report = self.audit(
                 Path(f'{self.venvs_path}/{venv["name"]}'))
 
             build_report = tools.Tools().packer(
@@ -160,7 +168,7 @@ class VenvCtl:
 
             reports.Reports().generate_reports(
                 Path(f'{self.venvs_path}/reports'),
-                venv["name"], reports_map, install_exitcode)
+                venv["name"], reports_map, exitcode)
 
     def run(self) -> None:
         """Run the virtual environments generation."""

@@ -2,3 +2,4 @@ piphyperd==1.5.5
 markd==0.1.19
 virtualenv==20.0.3
 click==7.0
+binaryornot==0.4.4
