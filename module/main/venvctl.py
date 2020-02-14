@@ -48,10 +48,10 @@ class VenvCtl:
         # venvs base dir
         default_dir = Path(f'{os.getcwd()}/python-venvs')
         self.venvs_path: Path = Path(output_dir) if output_dir else default_dir
-        # path of the base venv
-        self.base_venv_path = Path(f'{self.venvs_path}/base')
         # path to the python binary to use
         self.python_binary = python_binary if python_binary else sys.executable
+        # Initialize venvs
+        self.venvs: List[Any] = []
 
     @property
     def __get_bash_activation_fix(self) -> str:
@@ -67,73 +67,6 @@ class VenvCtl:
         """Return virtualenv command."""
         return 'virtualenv --activators bash --copies'
 
-    def get_config(self) -> Any:
-        """Get the venvs config file."""
-        with open(self.config_file, 'r') as file:
-            config = json.load(file)
-
-        return config
-
-    @staticmethod
-    def parse_venvs(config: Any) -> Tuple[Any, Any, Any]:
-        """Parse the venvs config file."""
-        base_venv: Any = config["base"]
-
-        all_venvs: Any = config["venvs"]
-
-        # regular venvs
-        regulars_venvs: Any = [
-            venv for venv in all_venvs if venv["type"] == "regular"]
-
-        # reserved to networking ops
-        networking_venvs: Any = [
-            venv for venv in all_venvs if venv["type"] == "networking"]
-        return base_venv, regulars_venvs, networking_venvs
-
-    @staticmethod
-    def install_packages(venv_path: Path,
-                         venv_packages: List[str]) -> Tuple[str, str, int]:
-        """Install packages within a specific virtual environment."""
-        subprocess.call('source {}/bin/activate'.format(venv_path), shell=True)
-        # piphyperd = PipHyperd(python_path=Path(f'{venv_path}/bin/python3'))
-
-        piphyperd = PipHyperd(
-            python_path=Path(f'{venv_path}/bin/python3'))
-
-        install_report, install_errors, exitcode = piphyperd.install(
-            *venv_packages)
-
-        tools.Tools.shebang_fixer(str(venv_path), "bin")
-        # virtualenv.make_environment_relocatable(venv_path)
-
-        return install_report, install_errors, exitcode
-
-    def __create_base_venv(self, venv_packages: List[str]) -> None:
-        """Create a virtual environment with the shared packages."""
-        subprocess.call(
-            f'{self.python_binary} -m {self.__get_venv_cmd} {self.base_venv_path}',
-            shell=True)
-        # virtualenv.create_environment(
-        #     home_dir=self.base_venv_path, symlink=False)
-
-        self.install_packages(self.base_venv_path, venv_packages)
-
-        with open(f'{self.base_venv_path}/bin/activate', 'r') as activate_file:
-            content = activate_file.read()
-
-        content = re.sub(r'VIRTUAL_ENV\s*=(.*)',
-                         self.__get_bash_activation_fix, content)
-
-        with open(f'{self.base_venv_path}/bin/activate', 'w') as activate_file:
-            activate_file.write(content)
-
-    def __create_from_base(self, venv_path: Path,
-                           venv_packages: List[str]) -> Tuple[str, str, int]:
-        shutil.copytree(src=self.base_venv_path, dst=venv_path)
-        # virtualenv.copy_file_or_folder(self.base_venv_path, venv_path)
-
-        return self.install_packages(venv_path, venv_packages)
-
     @staticmethod
     def audit(venv_path: Path) -> Tuple[str, str, str]:
         """Run audit against a specific virtual environment."""
@@ -146,37 +79,115 @@ class VenvCtl:
 
         return pip_freeze_report, pip_check_report, pip_outdated_report
 
+    @staticmethod
+    def install_packages(venv_path: Path,
+                         venv_packages: List[str]) -> Tuple[str, str, int]:
+        """Install packages within a specific virtual environment."""
+        piphyperd = PipHyperd(
+            python_path=Path(f'{venv_path}/bin/python3'))
+
+        install_report, install_errors, exitcode = piphyperd.install(
+            *venv_packages)
+
+        # Apply shebang fix to make the venv fully portable
+        tools.Tools.shebang_fixer(str(venv_path), "bin")
+
+        return install_report, install_errors, exitcode
+
+    def get_config(self) -> Any:
+        """Get the venvs config file."""
+        with open(self.config_file, 'r') as file:
+            config = json.load(file)
+
+        return config
+
+    def __get_venv_by_name(self, venvname: str) -> Any:
+        """
+        Search all virtual environments.
+
+        Returns the one with a matching `name` property.
+        """
+        for venv in self.venvs:
+            if venv["name"] == venvname:
+                return venv
+        return None
+
+    def __do_create_venv(self, venv_path: Path,
+                         venv_packages: List[str],
+                         parent_venv_path: Optional[Path]) -> Tuple[str, str, int]:
+        """Create virtual environment."""
+        # If a parent is defined, clone it and install the extra packages
+        if parent_venv_path is not None:
+            shutil.copytree(src=parent_venv_path, dst=venv_path)
+            return self.install_packages(venv_path, venv_packages)
+
+        # Otherwise create a brand new virtual environment
+        subprocess.call(
+            f'{self.python_binary} -m {self.__get_venv_cmd} {venv_path}',
+            shell=True)
+
+        result = self.install_packages(venv_path, venv_packages)
+
+        # Apply fix to /bin/activate
+        with open(f'{venv_path}/bin/activate', 'r') as activate_file:
+            content = activate_file.read()
+
+        content = re.sub(r'VIRTUAL_ENV\s*=(.*)',
+                         self.__get_bash_activation_fix, content)
+
+        with open(f'{venv_path}/bin/activate', 'w') as activate_file:
+            activate_file.write(content)
+
+        return result
+
+    def __generate_venv(self, venv: Any) -> None:
+        venvpath = Path(f'{self.venvs_path}/{venv["name"]}')
+        parent_venvpath = None
+
+        if "parent" in venv:
+            parent_venvpath = Path(f'{self.venvs_path}/{venv["parent"]}')
+
+        install_report, install_errors, exitcode = self.__do_create_venv(
+            venvpath, venv["packages"], parent_venvpath)
+
+        pip_freeze_report, pip_check_report, pip_outdated_report = self.audit(
+            Path(f'{self.venvs_path}/{venv["name"]}'))
+
+        build_report = tools.Tools().packer(
+            self.venvs_path, str(venv["name"]))
+
+        reports_map: Dict[str, str] = {
+            "Installation report": install_report,
+            "Errors and Warnings": install_errors,
+            "Pip Freeze Report": pip_freeze_report,
+            "Packages Audit Report": pip_check_report,
+            "Outdated Packages Report": pip_outdated_report,
+            "Build Report": build_report,
+        }
+
+        reports.Reports().generate_reports(
+            Path(f'{self.venvs_path}/reports'),
+            venv["name"], reports_map, exitcode)
+
     def __generate_venvs(self, venvs: Any) -> None:
+        """Generate virtual environments."""
         for venv in venvs:
-            install_report, install_errors, exitcode = self.__create_from_base(
-                Path(f'{self.venvs_path}/{venv["name"]}'), venv["packages"])
-
-            pip_freeze_report, pip_check_report, pip_outdated_report = self.audit(
-                Path(f'{self.venvs_path}/{venv["name"]}'))
-
-            build_report = tools.Tools().packer(
-                self.venvs_path, str(venv["name"]))
-
-            reports_map: Dict[str, str] = {
-                "Installation report": install_report,
-                "Errors and Warnings": install_errors,
-                "Pip Freeze Report": pip_freeze_report,
-                "Packages Audit Report": pip_check_report,
-                "Outdated Packages Report": pip_outdated_report,
-                "Build Report": build_report,
-            }
-
-            reports.Reports().generate_reports(
-                Path(f'{self.venvs_path}/reports'),
-                venv["name"], reports_map, exitcode)
+            # Eensure that the parent venv, if any, is present
+            if "parent" in venv:
+                parentdir = f'{self.venvs_path}/{venv["parent"]}'
+                exists = os.path.exists(parentdir) and os.path.isdir(parentdir)
+                if not exists:
+                    parentvenv = self.__get_venv_by_name(venv["parent"])
+                    if parentvenv is None:
+                        raise Exception(
+                            "Invalid Virtual Environment configuration.")
+                    # Generate the parent first
+                    self.__generate_venv(parentvenv)
+                self.__generate_venv(venv)
+            else:
+                self.__generate_venv(venv)
 
     def run(self) -> None:
         """Run the virtual environments generation."""
-        config = self.get_config()
-        base_venv, regulars_venvs, networking_venvs = self.parse_venvs(
-            config)
-        self.__create_base_venv(base_venv)
-
-        self.__generate_venvs(regulars_venvs)
-
-        self.__generate_venvs(networking_venvs)
+        self.venvs = self.get_config()
+        self.__generate_venvs(self.venvs)
