@@ -36,7 +36,7 @@ class VenvCtl:
 
     def __init__(self, config_file: Path,
                  output_dir: Optional[Path] = None,
-                 python_binary: Path = None) -> None:
+                 python_binary: Path = Path(sys.executable)) -> None:
         """
         Init the venvctl.
 

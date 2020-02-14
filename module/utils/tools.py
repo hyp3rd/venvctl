@@ -17,7 +17,6 @@ import io
 import re
 import glob
 from pathlib import Path
-from typing import List
 from binaryornot.check import is_binary
 
 

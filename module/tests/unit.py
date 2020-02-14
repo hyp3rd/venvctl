@@ -94,7 +94,7 @@ class TestMethods(unittest.TestCase):
         all_venvs = regulars_venvs + networking_venvs
 
         for venv in all_venvs:
-            pip_freeze_report, _, _ = self.venvctl.venv_audit(
+            pip_freeze_report, _, _ = self.venvctl.audit(
                 Path(f'{self.get_venv_base_path()}/{venv["name"]}'))
             for package in venv['packages']:
                 self.assertIn(package, pip_freeze_report)
