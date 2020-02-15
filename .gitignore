@@ -83,3 +83,6 @@ venvctl
 
 # venvs folder
 python-venvs/*
+
+# other
+playground.*
