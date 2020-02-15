@@ -7,16 +7,18 @@ include:
   - template: License-Scanning.gitlab-ci.yml
 
 variables:
-  build_cache: ${CI_PROJECT_DIR}/build_cache
+  BUILD_CACHE: "${CI_PROJECT_DIR}/build_cache"
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   DS_PYTHON_VERSION: 3
   DS_PIP_VERSION: "20.0.2"
-  PIP_REQUIREMENTS_FILE: requirements.txt
+  PIP_REQUIREMENTS_FILE: "requirements.txt"
   SAST_DEFAULT_ANALYZERS: "bandit"
   SAST_DISABLE_DIND: "true"
 
 cache:
   paths:
     - ${CI_PROJECT_DIR}/build_cache
+    - .cache/pip
   key: ${CI_PROJECT_ID}
 
 services:
@@ -58,6 +60,8 @@ unit:
   extends: .base-setup
   script:
     - python -m module.tests.unit
+  only:
+    - development
 
 coverage:
   stage: test
@@ -84,6 +88,7 @@ build:
   artifacts:
     paths:
       - ${CI_PROJECT_DIR}/build_cache/venvs
+  when: manual
   only:
     - master
 
@@ -102,7 +107,9 @@ deploy:
 
 .base-setup:
   before_script:
-    - mkdir -p $build_cache
-    - pip3 install --upgrade pip
-    - pip3 install -r requirements.txt
     - python --version
+    - mkdir -p $BUILD_CACHE
+    - pip3 install --upgrade pip virtualenv
+    - virtualenv venv
+    - source venv/bin/activate
+    - pip3 install -r requirements.txt
