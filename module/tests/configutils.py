@@ -121,7 +121,9 @@ class TestMethods(unittest.TestCase):
         """Assert that the config type is valid."""
         with self.assertRaises(AssertionError) as error:
             configutils.validate_config(self.invalid_config_type)
-        self.assertEqual(configutils.ERRORS["INVALID_CONFIG_OBJECT_TYPE"], str(error.exception))
+        self.assertEqual(
+            configutils.ERRORS["INVALID_CONFIG_OBJECT_TYPE"],
+            str(error.exception))
 
     def test_invalid_config_item_prop(self) -> None:
         """Assert that the config type is valid."""
