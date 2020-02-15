@@ -51,10 +51,14 @@ def validate_config(config: Any) -> bool:
         for key, value in item.items():
             # Ensure config item key is valid
             assert key in props, ERRORS["INVALID_ITEM_KEY"].replace("__KEY__", key)
-            assert isinstance(value, props[key]), ERRORS["INVALID_ITEM_PARENT"].replace("__KEY__", key).replace("__TYPE__", str(props[key]))
-            
+            assert isinstance(
+                value, props[key]), ERRORS["INVALID_ITEM_PARENT"].replace(
+                    "__KEY__", key).replace("__TYPE__", str(props[key]))
+
             # Ensure that if defined, the parent exists
             if key == "parent":
-                assert get_item_by_name(config, value) is not None, ERRORS["INVALID_ITEM_PARENT"].replace("__KEY__", value)
+                assert get_item_by_name(
+                    config, value) is not None, ERRORS["INVALID_ITEM_PARENT"].replace(
+                        "__KEY__", value)
 
     return True
