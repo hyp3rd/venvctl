@@ -137,6 +137,7 @@ class VenvCtl:
 
     def __generate_venv(self, venv: Any) -> None:
         venv_path = Path(f'{self.venvs_path}/{venv["name"]}')
+        parent_venv_path = None
 
         if "parent" in venv:
             parent_venv_path = Path(f'{self.venvs_path}/{venv["parent"]}')
