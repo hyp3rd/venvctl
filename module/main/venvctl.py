@@ -55,7 +55,7 @@ class VenvCtl:
         """FIX the bashvenv activation. WARNING.
 
         If you have any bash profile customization
-        at the `cd` command, this fix will breake.
+        at the `cd` command, this fix will break.
         """
         return 'VIRTUAL_ENV=$(cd $(dirname "$BASH_SOURCE"); dirname `pwd`)'
 
@@ -104,10 +104,7 @@ class VenvCtl:
 
         Returns the one with a matching `name` property.
         """
-        for venv in self.venvs:
-            if venv["name"] == venvname:
-                return venv
-        return None
+        return next((item for item in self.venvs if item["name"] == venvname), None)
 
     def __create_venv(self, venv_path: Path,
                       venv_packages: List[str],
@@ -167,22 +164,22 @@ class VenvCtl:
             Path(f'{self.venvs_path}/reports'),
             venv["name"], reports_map, exitcode)
 
+    def __ensure_parent_venv_is_present(self, venv: Any) -> None:
+        """Ensure that the prerequisite parent venv is present."""
+        parent_dir = Path(f'{self.venvs_path}/{venv["parent"]}')
+        if not os.path.isdir(parent_dir):
+            parent_venv = self.__get_venv_by_name(venv["parent"])
+            if parent_venv is None:
+                raise Exception(
+                    "Invalid Virtual Environment configuration.")
+            self.__generate_venv(parent_venv)
+
     def __generate_venvs(self, venvs: Any) -> None:
         """Generate virtual environments."""
         for venv in venvs:
-            # Eensure that the parent venv, if any, is present
             if "parent" in venv:
-                parent_dir = Path(f'{self.venvs_path}/{venv["parent"]}')
-                if not parent_dir.exists() and parent_dir.is_dir():
-                    parent_venv = self.__get_venv_by_name(venv["parent"])
-                    if parent_venv is None:
-                        raise Exception(
-                            "Invalid Virtual Environment configuration.")
-                    # Generate the parent first
-                    self.__generate_venv(parent_venv)
-                self.__generate_venv(venv)
-            else:
-                self.__generate_venv(venv)
+                self.__ensure_parent_venv_is_present(venv)
+            self.__generate_venv(venv)
 
     def run(self) -> None:
         """Run the virtual environments generation."""
