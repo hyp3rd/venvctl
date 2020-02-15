@@ -21,7 +21,7 @@ from typing import Any, List, Tuple, Dict, Optional
 import shutil
 import re
 from piphyperd import PipHyperd
-from ..utils import reports, utils
+from ..utils import reports, utils, configutils
 
 
 class VenvCtl:
@@ -98,14 +98,6 @@ class VenvCtl:
 
         return config
 
-    def __get_venv_by_name(self, venvname: str) -> Any:
-        """
-        Search all virtual environments.
-
-        Returns the one with a matching `name` property.
-        """
-        return next((item for item in self.venvs if item["name"] == venvname), None)
-
     def __create_venv(self, venv_path: Path,
                       venv_packages: List[str],
                       parent_venv_path: Optional[Path]) -> Tuple[str, str, int]:
@@ -168,7 +160,7 @@ class VenvCtl:
         """Ensure that the prerequisite parent venv is present."""
         parent_dir = Path(f'{self.venvs_path}/{venv["parent"]}')
         if not os.path.isdir(parent_dir):
-            parent_venv = self.__get_venv_by_name(venv["parent"])
+            parent_venv = configutils.get_item_by_name(self.venvs, venv["parent"])
             if parent_venv is None:
                 raise Exception(
                     "Invalid Virtual Environment configuration.")
@@ -184,4 +176,5 @@ class VenvCtl:
     def run(self) -> None:
         """Run the virtual environments generation."""
         self.venvs = self.get_config()
+        configutils.validate_config(self.venvs)
         self.__generate_venvs(self.venvs)
