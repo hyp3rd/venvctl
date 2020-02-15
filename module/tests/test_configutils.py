@@ -126,7 +126,7 @@ class TestMethods(unittest.TestCase):
             str(error.exception))
 
     def test_invalid_config_item_prop(self) -> None:
-        """Assert that the config type is valid."""
+        """Assert that the config items properties valid."""
         with self.assertRaises(AssertionError) as error:
             configutils.validate_config(self.invalid_config_item_prop)
         self.assertEqual(
@@ -134,12 +134,12 @@ class TestMethods(unittest.TestCase):
             str(error.exception))
 
     def test_invalid_config_item_prop_type(self) -> None:
-        """Assert that the config type is valid."""
+        """Assert that the config items property types are valid."""
         with self.assertRaises(AssertionError):
             configutils.validate_config(self.invalid_config_item_prop_type)
 
     def test_invalid_config_item_type(self) -> None:
-        """Assert that the config type is valid."""
+        """Assert that the config items type is valid."""
         with self.assertRaises(AssertionError) as error:
             configutils.validate_config(self.invalid_config_item_type)
         self.assertEqual(
@@ -147,7 +147,7 @@ class TestMethods(unittest.TestCase):
             str(error.exception))
 
     def test_invalid_config_item_parent(self) -> None:
-        """Assert that the config type is valid."""
+        """Assert that the defined parents are valid."""
         with self.assertRaises(AssertionError) as error:
             configutils.validate_config(self.invalid_config_item_parent)
         self.assertEqual(
