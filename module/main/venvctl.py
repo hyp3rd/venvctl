@@ -49,6 +49,8 @@ class VenvCtl:
         self.venvs: List[Any] = []
         # path to the python binary to use
         self.python_binary = python_binary if python_binary else sys.executable
+        # Initialize venvs
+        self.venvs: List[Any] = []
 
     @property
     def __get_bash_activation_fix(self) -> str:
