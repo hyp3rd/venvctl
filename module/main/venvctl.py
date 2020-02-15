@@ -49,8 +49,6 @@ class VenvCtl:
         self.venvs: List[Any] = []
         # path to the python binary to use
         self.python_binary = python_binary if python_binary else sys.executable
-        # Initialize venvs
-        self.venvs: List[Any] = []
 
     @property
     def __get_bash_activation_fix(self) -> str:
@@ -139,7 +137,6 @@ class VenvCtl:
 
     def __generate_venv(self, venv: Any) -> None:
         venv_path = Path(f'{self.venvs_path}/{venv["name"]}')
-        parent_venv_path: Path = None
 
         if "parent" in venv:
             parent_venv_path = Path(f'{self.venvs_path}/{venv["parent"]}')
