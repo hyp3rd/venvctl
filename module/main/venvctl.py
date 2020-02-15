@@ -44,6 +44,7 @@ class VenvCtl:
         self.config_file: Path = Path(config_file)
         # venvs base dir
         default_dir = Path(f'{os.getcwd()}/python-venvs')
+        # venvs output directory
         self.venvs_path: Path = Path(output_dir) if output_dir else default_dir
         # Initialize venvs
         self.venvs: List[Any] = []
@@ -98,21 +99,21 @@ class VenvCtl:
 
         return config
 
-    def __get_venv_by_name(self, venvname: str) -> Any:
+    def __get_venv_by_name(self, venv_name: str) -> Any:
         """
         Search all virtual environments.
 
         Returns the one with a matching `name` property.
         """
-        return next((item for item in self.venvs if item["name"] == venvname), None)
+        return next((ve for ve in self.venvs if ve["name"] == venv_name), None)
 
     def __create_venv(self, venv_path: Path,
                       venv_packages: List[str],
-                      parent_venv_path: Optional[Path]) -> Tuple[str, str, int]:
+                      parent_path: Optional[Path]) -> Tuple[str, str, int]:
         """Create virtual environment."""
         # If a parent is defined, clone it and install the extra packages
-        if parent_venv_path is not None:
-            shutil.copytree(src=parent_venv_path, dst=venv_path)
+        if parent_path is not None:
+            shutil.copytree(src=parent_path, dst=venv_path)
             return self.install_packages(venv_path, venv_packages)
 
         # Otherwise create a brand new virtual environment
@@ -137,13 +138,13 @@ class VenvCtl:
 
     def __generate_venv(self, venv: Any) -> None:
         venv_path = Path(f'{self.venvs_path}/{venv["name"]}')
-        parent_venv_path = None
+        parent_path = None
 
         if "parent" in venv:
-            parent_venv_path = Path(f'{self.venvs_path}/{venv["parent"]}')
+            parent_path = Path(f'{self.venvs_path}/{venv["parent"]}')
 
         install_report, install_errors, exitcode = self.__create_venv(
-            venv_path, venv["packages"], parent_venv_path)
+            venv_path, venv["packages"], parent_path)
 
         pip_freeze_report, pip_check_report, pip_outdated_report = self.audit(
             Path(f'{self.venvs_path}/{venv["name"]}'))

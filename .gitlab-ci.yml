@@ -29,7 +29,7 @@ stages:
 
 pylint:
   stage: test
-  extends: .pipelinesetup
+  extends: .base-setup
   script:
     - pip3 install --upgrade pylint pylint-exit anybadge
     - mkdir ./pylint
@@ -43,25 +43,25 @@ pylint:
 
 code-quality:
   stage: test
-  extends: .pipelinesetup
+  extends: .base-setup
   script:
     - pip3 install mypy
     - mypy --strict module/main/venvctl.py
     - mypy --strict module/tests/unit.py
     - mypy --strict module/utils/reports.py
-    - mypy --strict module/utils/tools.py
+    - mypy --strict module/utils/utils.py
     - mypy --strict module/cli/main.py
   allow_failure: true
 
 unit:
   stage: test
-  extends: .pipelinesetup
+  extends: .base-setup
   script:
     - python -m module.tests.unit
 
 coverage:
   stage: test
-  extends: .pipelinesetup
+  extends: .base-setup
   script:
     - pip3 install codecov
     - coverage run -m module generate --config ./module/tests/config/venvs.json --out ${CI_PROJECT_DIR}/build_cache/venvs_coverage
@@ -75,7 +75,7 @@ coverage:
 
 build:
   stage: build
-  extends: .pipelinesetup
+  extends: .base-setup
   script:
       - rm -rf ${CI_PROJECT_DIR}/build_cache/venvs
       - pip3 install --upgrade -r requirements.txt
@@ -87,17 +87,20 @@ build:
   only:
     - master
 
-# deploy:
-#   stage: deploy
-#   extends: .pipelinesetup
-#   script:
-#     - make clean
-#     - make pylint module
-#     - make upload
-#   only:
-#     - master
+deploy:
+  stage: deploy
+  extends: .base-setup
+  script:
+    - echo $PYPIRC_INI > .pypirc
+    - make clean
+    - make pylint module
+    - make upload
+    - rm -rf .pypirc
+  when: manual
+  only:
+    - master
 
-.pipelinesetup:
+.base-setup:
   before_script:
     - mkdir -p $build_cache
     - pip3 install --upgrade pip
