@@ -58,17 +58,17 @@ unit:
   extends: .pipelinesetup
   script:
     - python -m module.tests.unit
-    - rm -rf ${CI_PROJECT_DIR}/build_cache/venvs_unit
 
 coverage:
   stage: test
   extends: .pipelinesetup
   script:
     - pip3 install codecov
-    - coverage run -m module generate --config ./module/tests/config/venvs.json --out ${CI_PROJECT_DIR}/build_cache/venvs_unit
+    - coverage run -m module generate --config ./module/tests/config/venvs.json --out ${CI_PROJECT_DIR}/build_cache/venvs_coverage
     - coverage report -m
     - coverage html -d ${CI_PROJECT_DIR}/build_cache/tests/coverage
     - bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
+    - rm -rf ${CI_PROJECT_DIR}/build_cache/venvs_coverage
   only:
     - development
     - master
