@@ -9,9 +9,9 @@ This module is part of VenvCtl: <https://pypi.org/project/venvctl/>.
 The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 """
 
-from typing import Any
+from typing import Any, Dict
 
-def valid_properties() -> dict:
+def valid_properties() -> Dict[Any, Any]:
     """Valid configuration item properties and types."""
     return {
         "name": str,
@@ -19,7 +19,7 @@ def valid_properties() -> dict:
         "packages": list
     }
 
-def get_item_by_name(config: list, name: str) -> dict:
+def get_item_by_name(config: list, name: str) -> Any:
     """
     Search all virtual environments.
 
