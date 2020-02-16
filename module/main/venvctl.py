@@ -15,7 +15,7 @@ The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 import os
 import sys
 import json
-import subprocess
+from subprocess import Popen, PIPE
 from pathlib import Path
 from typing import Any, List, Tuple, Dict, Optional
 import shutil
@@ -49,11 +49,6 @@ class VenvCtl:
         self.venvs: List[Any] = []
         # path to the python binary to use
         self.python_binary = python_binary if python_binary else sys.executable
-
-    @property
-    def __get_venv_cmd(self) -> str:
-        """Return virtualenv command."""
-        return 'virtualenv --activators bash --copies'
 
     @staticmethod
     def audit(venv_path: Path) -> Tuple[str, str, str]:
@@ -98,10 +93,12 @@ class VenvCtl:
             shutil.copytree(src=parent_path, dst=venv_path)
             return self.install_packages(venv_path, venv_packages)
 
-        # Otherwise create a brand new virtual environment
-        subprocess.call(
-            f'{self.python_binary} -m {self.__get_venv_cmd} {venv_path}',
-            shell=True)
+        process = Popen(
+            [str(self.python_binary),
+             "-m", "virtualenv", "--activators", "bash", "--copies", venv_path],
+            stdout=PIPE, stderr=PIPE)
+
+        process.wait()
 
         install_report, install_errors, exitcode = self.install_packages(
             venv_path, venv_packages)
