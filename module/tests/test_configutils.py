@@ -31,28 +31,28 @@ class TestMethods(unittest.TestCase):
             "name": "ansible_2_6",
             "parent": "base",
             "packages": [
-                    "ansible==2.6",
-                    "identify==1.4.11"
+                "ansible==2.6",
+                "identify==1.4.11"
             ]
         }, {
             "name": "ansible_2_7",
             "parent": "base",
             "packages": [
-                    "ansible==2.7"
+                "ansible==2.7"
             ]
         }, {
             "name": "ansible_2_9",
             "parent": "base",
             "packages": [
-                    "ansible==2.9"
+                "ansible==2.9"
             ]
         }, {
             "name": "ansible_2_9_networking",
             "parent": "ansible_2_9",
             "packages": [
-                    "websocket-client==0.56.0",
-                    "urllib3==1.24.1",
-                    "tox==3.12.1"
+                "websocket-client==0.56.0",
+                "urllib3==1.24.1",
+                "tox==3.12.1"
             ]
         }]
 
@@ -67,28 +67,28 @@ class TestMethods(unittest.TestCase):
             "name": "ansible_2_6",
             "parent": "whatever",
             "packages": [
-                    "ansible==2.6",
-                    "identify==1.4.11"
+                "ansible==2.6",
+                "identify==1.4.11"
             ]
         }, {
             "name": "ansible_2_7",
             "parent": "base",
             "packages": [
-                    "ansible==2.7"
+                "ansible==2.7"
             ]
         }, {
             "name": "ansible_2_9",
             "parent": "base",
             "packages": [
-                    "ansible==2.9"
+                "ansible==2.9"
             ]
         }, {
             "name": "ansible_2_9_networking",
             "parent": "ansible_2_9",
             "packages": [
-                    "websocket-client==0.56.0",
-                    "urllib3==1.24.1",
-                    "tox==3.12.1"
+                "websocket-client==0.56.0",
+                "urllib3==1.24.1",
+                "tox==3.12.1"
             ]
         }]
 
