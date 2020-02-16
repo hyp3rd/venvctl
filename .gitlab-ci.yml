@@ -18,9 +18,25 @@ cache:
   key: ${CI_PROJECT_ID}
 
 include:
-  - template: License-Scanning.gitlab-ci.yml
+  # - template: License-Scanning.gitlab-ci.yml
   - template: Dependency-Scanning.gitlab-ci.yml
-  - template: SAST.gitlab-ci.yml
+  # - template: SAST.gitlab-ci.yml
+
+bandit-sast:
+  trigger:
+    include:
+      - template: SAST.gitlab-ci.yml
+  only:
+    - master
+
+license-scanning:
+  trigger:
+    include:
+      - template: License-Scanning.gitlab-ci.yml
+    strategy: depend
+  only:
+    - development
+    - master
 
 stages:
   - test
@@ -101,6 +117,9 @@ deploy:
     - make upload
     - rm -rf .pypirc
   when: manual
+  artifacts:
+    paths:
+      - ./dist/
   only:
     - master
 
