@@ -27,34 +27,34 @@ class TestMethods(unittest.TestCase):
                 "cryptography==2.7",
                 "whichcraft==Í0.5.2"
             ]
-            }, {
-                "name": "ansible_2_6",
-                "parent": "base",
-                "packages": [
+        }, {
+            "name": "ansible_2_6",
+            "parent": "base",
+            "packages": [
                     "ansible==2.6",
                     "identify==1.4.11"
-                ]
-            }, {
-                "name": "ansible_2_7",
-                "parent": "base",
-                "packages": [
+            ]
+        }, {
+            "name": "ansible_2_7",
+            "parent": "base",
+            "packages": [
                     "ansible==2.7"
-                ]
-            }, {
-                "name": "ansible_2_9",
-                "parent": "base",
-                "packages": [
+            ]
+        }, {
+            "name": "ansible_2_9",
+            "parent": "base",
+            "packages": [
                     "ansible==2.9"
-                ]
-            }, {
-                "name": "ansible_2_9_networking",
-                "parent": "ansible_2_9",
-                "packages": [
+            ]
+        }, {
+            "name": "ansible_2_9_networking",
+            "parent": "ansible_2_9",
+            "packages": [
                     "websocket-client==0.56.0",
                     "urllib3==1.24.1",
                     "tox==3.12.1"
-                ]
-            }]
+            ]
+        }]
 
         self.invalid_config_item_parent = [{
             "name": "base",
@@ -63,34 +63,34 @@ class TestMethods(unittest.TestCase):
                 "cryptography==2.7",
                 "whichcraft==0.5.2"
             ]
-            }, {
-                "name": "ansible_2_6",
-                "parent": "whatever",
-                "packages": [
+        }, {
+            "name": "ansible_2_6",
+            "parent": "whatever",
+            "packages": [
                     "ansible==2.6",
                     "identify==1.4.11"
-                ]
-            }, {
-                "name": "ansible_2_7",
-                "parent": "base",
-                "packages": [
+            ]
+        }, {
+            "name": "ansible_2_7",
+            "parent": "base",
+            "packages": [
                     "ansible==2.7"
-                ]
-            }, {
-                "name": "ansible_2_9",
-                "parent": "base",
-                "packages": [
+            ]
+        }, {
+            "name": "ansible_2_9",
+            "parent": "base",
+            "packages": [
                     "ansible==2.9"
-                ]
-            }, {
-                "name": "ansible_2_9_networking",
-                "parent": "ansible_2_9",
-                "packages": [
+            ]
+        }, {
+            "name": "ansible_2_9_networking",
+            "parent": "ansible_2_9",
+            "packages": [
                     "websocket-client==0.56.0",
                     "urllib3==1.24.1",
                     "tox==3.12.1"
-                ]
-            }]
+            ]
+        }]
 
         self.invalid_config_type = {
             "venvs": [
@@ -101,11 +101,11 @@ class TestMethods(unittest.TestCase):
             ]}
 
         self.invalid_config_item_prop = [
-                {
-                    "whatever": "test",
-                    "packages": []
-                }
-            ]
+            {
+                "whatever": "test",
+                "packages": []
+            }
+        ]
 
         self.invalid_config_item_prop_type = [{
             "name": False,
@@ -130,7 +130,8 @@ class TestMethods(unittest.TestCase):
         with self.assertRaises(AssertionError) as error:
             configutils.validate_config(self.invalid_config_item_prop)
         self.assertEqual(
-            configutils.ERRORS["INVALID_ITEM_KEY"].replace("__KEY__", "whatever"),
+            configutils.ERRORS["INVALID_ITEM_KEY"].replace(
+                "__KEY__", "whatever"),
             str(error.exception))
 
     def test_invalid_config_item_prop_type(self) -> None:
@@ -151,7 +152,8 @@ class TestMethods(unittest.TestCase):
         with self.assertRaises(AssertionError) as error:
             configutils.validate_config(self.invalid_config_item_parent)
         self.assertEqual(
-            configutils.ERRORS["INVALID_ITEM_PARENT"].replace("__KEY__", "whatever"),
+            configutils.ERRORS["INVALID_ITEM_PARENT"].replace(
+                "__KEY__", "whatever"),
             str(error.exception))
 
 

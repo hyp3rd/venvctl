@@ -19,7 +19,6 @@ import subprocess
 from pathlib import Path
 from typing import Any, List, Tuple, Dict, Optional
 import shutil
-import re
 from piphyperd import PipHyperd
 from ..utils import reports, utils, configutils
 
@@ -50,15 +49,6 @@ class VenvCtl:
         self.venvs: List[Any] = []
         # path to the python binary to use
         self.python_binary = python_binary if python_binary else sys.executable
-
-    @property
-    def __get_bash_activation_fix(self) -> str:
-        """FIX the bashvenv activation. WARNING.
-
-        If you have any bash profile customization
-        at the `cd` command, this fix will break.
-        """
-        return 'VIRTUAL_ENV=$(cd $(dirname "$BASH_SOURCE"); dirname `pwd`)'
 
     @property
     def __get_venv_cmd(self) -> str:
@@ -117,14 +107,7 @@ class VenvCtl:
             venv_path, venv_packages)
 
         # Apply fix to /bin/activate
-        with open(f'{venv_path}/bin/activate', 'r') as activate_file:
-            content = activate_file.read()
-
-        content = re.sub(r'VIRTUAL_ENV\s*=(.*)',
-                         self.__get_bash_activation_fix, content)
-
-        with open(f'{venv_path}/bin/activate', 'w') as activate_file:
-            activate_file.write(content)
+        utils.Helpers().apply_bash_activation_fix(venv_path)
 
         return install_report, install_errors, exitcode
 
@@ -161,7 +144,8 @@ class VenvCtl:
         """Ensure that the prerequisite parent venv is present."""
         parent_dir = Path(f'{self.venvs_path}/{venv["parent"]}')
         if not os.path.isdir(parent_dir):
-            parent_venv = configutils.get_item_by_name(self.venvs, venv["parent"])
+            parent_venv = configutils.get_item_by_name(
+                self.venvs, venv["parent"])
             if parent_venv is None:
                 raise Exception(
                     "Invalid Virtual Environment configuration.")

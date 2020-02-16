@@ -1,9 +1,7 @@
 [{
         "name": "base",
         "packages": [
-            "docker==4.1.0",
-            "cryptography==2.7",
-            "whichcraft==0.5.2"
+            "docker==4.1.0"
         ]
     },
     {
@@ -32,8 +30,6 @@
         "name": "ansible_2_9_networking",
         "parent": "ansible_2_9",
         "packages": [
-            "websocket-client==0.56.0",
-            "urllib3==1.24.1",
             "tox==3.12.1"
         ]
     }

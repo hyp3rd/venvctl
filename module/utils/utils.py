@@ -28,6 +28,27 @@ class Helpers:
         """FIX: the shebang in python files."""
         return '#!/usr/bin/env python'
 
+    @staticmethod
+    def get_bash_activation_fix() -> str:
+        """FIX the bashvenv activation. WARNING.
+
+        If you have any bash profile customization
+        at the `cd` command, this fix will break.
+        """
+        return 'VIRTUAL_ENV=$(cd $(dirname "$BASH_SOURCE"); dirname `pwd`)'
+
+    @classmethod
+    def apply_bash_activation_fix(cls, venv_path: Path) -> None:
+        """Apply fix to /bin/activate."""
+        with open(f'{venv_path}/bin/activate', 'r') as activate_file:
+            content = activate_file.read()
+
+        content = re.sub(r'VIRTUAL_ENV\s*=(.*)',
+                         cls.get_bash_activation_fix(), content)
+
+        with open(f'{venv_path}/bin/activate', 'w') as activate_file:
+            activate_file.write(content)
+
     @classmethod
     def shebang_fixer(cls, venv_path: str, target_dir: str) -> None:
         """Fix the shebang path in any python file."""
