@@ -22,12 +22,6 @@ cache:
     - .cache/pip
   key: ${CI_PROJECT_ID}
 
-security-scanning:
-  trigger:
-    include:
-      - template: SAST.gitlab-ci.yml
-        # strategy: depend
-
 stages:
   - test
   - build
@@ -78,6 +72,15 @@ coverage:
     - rm -rf ${CI_PROJECT_DIR}/build_cache/venvs_coverage
   only:
     - development
+    - master
+
+secure:
+  stage: test
+  trigger:
+    include:
+      - template: SAST.gitlab-ci.yml
+        # strategy: depend
+  only:
     - master
 
 build:
