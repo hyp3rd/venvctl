@@ -1,10 +1,6 @@
 ---
 image: python:latest
 
-include:
-  - template: Dependency-Scanning.gitlab-ci.yml
-  - template: License-Scanning.gitlab-ci.yml
-
 variables:
   BUILD_CACHE: "${CI_PROJECT_DIR}/build_cache"
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
@@ -21,11 +17,21 @@ cache:
     - .cache/pip
   key: ${CI_PROJECT_ID}
 
-trigger_job:
-  trigger:
-    include:
-      - template: SAST.gitlab-ci.yml
-    strategy: depend
+include:
+  - template: License-Scanning.gitlab-ci.yml
+  - template: SAST.gitlab-ci.yml
+  - template: Dependency-Scanning.gitlab-ci.yml
+# sast-bandit:
+#   trigger:
+#     include:
+#       - template: SAST.gitlab-ci.yml
+#     strategy: depend
+
+# dependency-scanning:
+#   trigger:
+#     include:
+#       - template: Dependency-Scanning.gitlab-ci.yml
+#     strategy: depend
 
 stages:
   - test
