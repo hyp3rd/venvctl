@@ -95,7 +95,8 @@ class VenvCtl:
 
         process = Popen(
             [str(self.python_binary),
-             "-m", "virtualenv", "--activators", "bash", "--copies", venv_path],
+             "-m", "virtualenv",
+             "--activators", "bash", "--copies", venv_path],
             stdout=PIPE, stderr=PIPE)
 
         process.wait()
