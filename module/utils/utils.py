@@ -9,7 +9,7 @@ Tools is a helper object.
 This module is part of VenvCtl: <https://pypi.org/project/venvctl/>.
 The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 """
-
+import sys
 import os
 import tarfile
 import contextlib
@@ -21,7 +21,12 @@ from binaryornot.check import is_binary
 
 
 class Helpers:
-    """Tools and Utils."""
+    """Helper class."""
+
+    @staticmethod
+    def set_envoironment():
+        """Set the environment."""
+        sys.tracebacklimit = 0  # Avoid Traceback leaks
 
     @staticmethod
     def get_shebang_fix() -> str:
