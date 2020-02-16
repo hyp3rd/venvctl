@@ -14,7 +14,7 @@ variables:
   PIP_REQUIREMENTS_FILE: "requirements.txt"
   SAST_DEFAULT_ANALYZERS: "bandit"
   SAST_DISABLE_DIND: "true"
-  SAST_EXCLUDED_PATHS: ${CI_PROJECT_DIR}/build_cache/*
+  SAST_EXCLUDED_PATHS: ${CI_PROJECT_DIR}/build_cache,$CI_PROJECT_DIR/.cache/pip
 
 cache:
   paths:
