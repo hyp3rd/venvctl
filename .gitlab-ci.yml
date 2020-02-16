@@ -3,7 +3,6 @@ image: python:latest
 
 include:
   - template: Dependency-Scanning.gitlab-ci.yml
-  - template: SAST.gitlab-ci.yml
   - template: License-Scanning.gitlab-ci.yml
 
 variables:
@@ -21,6 +20,12 @@ cache:
     - ${CI_PROJECT_DIR}/build_cache
     - .cache/pip
   key: ${CI_PROJECT_ID}
+
+trigger_job:
+  trigger:
+    include:
+      - template: SAST.gitlab-ci.yml
+    strategy: depend
 
 stages:
   - test
@@ -72,15 +77,6 @@ coverage:
     - rm -rf ${CI_PROJECT_DIR}/build_cache/venvs_coverage
   only:
     - development
-    - master
-
-secure:
-  stage: test
-  trigger:
-    include:
-      - template: SAST.gitlab-ci.yml
-        # strategy: depend
-  only:
     - master
 
 build:
