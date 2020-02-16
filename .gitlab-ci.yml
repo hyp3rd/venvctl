@@ -73,6 +73,7 @@ coverage:
   only:
     - development
     - master
+  allow_failure: true
 
 build:
   stage: build
