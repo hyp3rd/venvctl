@@ -19,19 +19,18 @@ cache:
 
 include:
   - template: License-Scanning.gitlab-ci.yml
-  - template: SAST.gitlab-ci.yml
-  - template: Dependency-Scanning.gitlab-ci.yml
-# sast-bandit:
-#   trigger:
-#     include:
-#       - template: SAST.gitlab-ci.yml
-#     strategy: depend
 
-# dependency-scanning:
-#   trigger:
-#     include:
-#       - template: Dependency-Scanning.gitlab-ci.yml
-#     strategy: depend
+sast-bandit:
+  trigger:
+    include:
+      - template: SAST.gitlab-ci.yml
+    strategy: depend
+
+dependency-scanning:
+  trigger:
+    include:
+      - template: Dependency-Scanning.gitlab-ci.yml
+    strategy: depend
 
 stages:
   - test
