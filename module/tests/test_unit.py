@@ -13,7 +13,6 @@ The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 
 import unittest
 import os
-import shutil
 from pathlib import Path
 from typing import Any
 import glob
@@ -34,21 +33,6 @@ class TestMethods(unittest.TestCase):
     def get_venv_base_path() -> Path:
         """Return the venv base folder path."""
         return Path(f'{os.getcwd()}/python-venvs')
-
-    @staticmethod
-    def get_bash_activation_fix() -> str:
-        """FIX the bashvenv activation. WARNING.
-
-        If you have any bash profile customization
-        at the `cd` command, this fix will breake.
-        """
-        return 'VIRTUAL_ENV=$(cd $(dirname "$BASH_SOURCE"); dirname `pwd`)'
-
-    @staticmethod
-    def wiper(folder_path: Path) -> None:
-        """Clean up folders generated during the tests."""
-        if os.path.isdir(folder_path):
-            shutil.rmtree(folder_path)
 
     def get_venvs_config(self) -> Any:
         """Get the venvs config file."""
@@ -87,7 +71,8 @@ class TestMethods(unittest.TestCase):
         for venv in self.get_venvs_config():
             current_path = f'{self.get_venv_base_path()}/{venv["name"]}'
             with open(f'{current_path}/bin/activate', 'r') as file:
-                verify = (self.get_bash_activation_fix() in file.read())
+                verify = (utils.Helpers().get_bash_activation_fix()
+                          in file.read())
 
                 self.assertTrue(verify)
 

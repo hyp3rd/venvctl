@@ -21,9 +21,6 @@ cache:
     - .cache/pip
   key: ${CI_PROJECT_ID}
 
-services:
-  - docker:dind
-
 stages:
   - test
   - build
@@ -33,7 +30,7 @@ pylint:
   stage: test
   extends: .base-setup
   script:
-    - pip3 install --upgrade pylint pylint-exit anybadge
+    - pip3 install --upgrade pylint-exit anybadge
     - mkdir ./pylint
     - cd ./module && pylint *  -f parseable --ignore-imports=yes --output-format=text . | tee ../pylint/pylint.log || pylint-exit $? && cd -
     - PYLINT_SCORE=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' ./pylint/pylint.log)
@@ -49,17 +46,16 @@ code-quality:
   script:
     - pip3 install mypy
     - mypy --strict module/main/venvctl.py
-    - mypy --strict module/tests/unit.py
-    - mypy --strict module/utils/reports.py
-    - mypy --strict module/utils/utils.py
     - mypy --strict module/cli/main.py
+    - mypy --strict module/tests/test_*.py
   allow_failure: true
 
 unit:
   stage: test
   extends: .base-setup
   script:
-    - python -m module.tests.unit
+    - python -m module.tests.test_unit
+    - python -m module.tests.test_configutils
   only:
     - development
 
@@ -109,7 +105,7 @@ deploy:
   before_script:
     - python --version
     - mkdir -p $BUILD_CACHE
-    - pip3 install --upgrade pip virtualenv
+    - pip3 install --upgrade pip virtualenv pylint
     - virtualenv venv
     - source venv/bin/activate
     - pip3 install -r requirements.txt
