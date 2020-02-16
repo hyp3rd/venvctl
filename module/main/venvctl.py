@@ -14,6 +14,7 @@ The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 
 import os
 import sys
+import errno
 import json
 from subprocess import Popen, PIPE
 from pathlib import Path
@@ -39,6 +40,8 @@ class VenvCtl:
         config_path -- Path to the venvs config file)
         output_dir -- Directory path to output the venvs artifacts
         """
+        # set the environment
+        utils.Helpers().set_envoironment()
         # venvs config file
         self.config_file: Path = Path(config_file)
         # venvs base dir
@@ -79,10 +82,12 @@ class VenvCtl:
 
     def get_config(self) -> Any:
         """Get the venvs config file."""
-        with open(self.config_file, 'r') as file:
-            config = json.load(file)
-
-        return config
+        if self.config_file.exists() and self.config_file.is_file():
+            with open(self.config_file, 'r') as file:
+                config = json.load(file)
+            return config
+        raise FileNotFoundError(
+            errno.ENOENT, os.strerror(errno.ENOENT), self.config_file)
 
     def __create_venv(self, venv_path: Path,
                       venv_packages: List[str],
