@@ -26,7 +26,8 @@ security-scanning:
   trigger:
     include:
       - template: SAST.gitlab-ci.yml
-    strategy: depend
+        # strategy: depend
+        branch: master
 
 stages:
   - test
