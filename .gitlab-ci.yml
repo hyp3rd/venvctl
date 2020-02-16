@@ -7,16 +7,18 @@ include:
   - template: License-Scanning.gitlab-ci.yml
 
 variables:
-  build_cache: ${CI_PROJECT_DIR}/build_cache
+  BUILD_CACHE: "${CI_PROJECT_DIR}/build_cache"
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   DS_PYTHON_VERSION: 3
   DS_PIP_VERSION: "20.0.2"
-  PIP_REQUIREMENTS_FILE: requirements.txt
+  PIP_REQUIREMENTS_FILE: "requirements.txt"
   SAST_DEFAULT_ANALYZERS: "bandit"
   SAST_DISABLE_DIND: "true"
 
 cache:
   paths:
     - ${CI_PROJECT_DIR}/build_cache
+    - .cache/pip
   key: ${CI_PROJECT_ID}
 
 services:
@@ -29,7 +31,7 @@ stages:
 
 pylint:
   stage: test
-  extends: .pipelinesetup
+  extends: .base-setup
   script:
     - pip3 install --upgrade pylint pylint-exit anybadge
     - mkdir ./pylint
@@ -43,39 +45,41 @@ pylint:
 
 code-quality:
   stage: test
-  extends: .pipelinesetup
+  extends: .base-setup
   script:
     - pip3 install mypy
     - mypy --strict module/main/venvctl.py
     - mypy --strict module/tests/unit.py
     - mypy --strict module/utils/reports.py
-    - mypy --strict module/utils/tools.py
+    - mypy --strict module/utils/utils.py
     - mypy --strict module/cli/main.py
   allow_failure: true
 
 unit:
   stage: test
-  extends: .pipelinesetup
+  extends: .base-setup
   script:
     - python -m module.tests.unit
-    - rm -rf ${CI_PROJECT_DIR}/build_cache/venvs_unit
+  only:
+    - development
 
 coverage:
   stage: test
-  extends: .pipelinesetup
+  extends: .base-setup
   script:
     - pip3 install codecov
-    - coverage run -m module generate --config ./module/tests/config/venvs.json --out ${CI_PROJECT_DIR}/build_cache/venvs_unit
+    - coverage run -m module generate --config ./module/tests/config/venvs.json --out ${CI_PROJECT_DIR}/build_cache/venvs_coverage
     - coverage report -m
     - coverage html -d ${CI_PROJECT_DIR}/build_cache/tests/coverage
     - bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
+    - rm -rf ${CI_PROJECT_DIR}/build_cache/venvs_coverage
   only:
     - development
     - master
 
 build:
   stage: build
-  extends: .pipelinesetup
+  extends: .base-setup
   script:
       - rm -rf ${CI_PROJECT_DIR}/build_cache/venvs
       - pip3 install --upgrade -r requirements.txt
@@ -84,22 +88,28 @@ build:
   artifacts:
     paths:
       - ${CI_PROJECT_DIR}/build_cache/venvs
+  when: manual
   only:
     - master
 
-# deploy:
-#   stage: deploy
-#   extends: .pipelinesetup
-#   script:
-#     - make clean
-#     - make pylint module
-#     - make upload
-#   only:
-#     - master
+deploy:
+  stage: deploy
+  extends: .base-setup
+  script:
+    - echo $PYPIRC_INI > .pypirc
+    - make clean
+    - make pylint module
+    - make upload
+    - rm -rf .pypirc
+  when: manual
+  only:
+    - master
 
-.pipelinesetup:
+.base-setup:
   before_script:
-    - mkdir -p $build_cache
-    - pip3 install --upgrade pip
-    - pip3 install -r requirements.txt
     - python --version
+    - mkdir -p $BUILD_CACHE
+    - pip3 install --upgrade pip virtualenv
+    - virtualenv venv
+    - source venv/bin/activate
+    - pip3 install -r requirements.txt

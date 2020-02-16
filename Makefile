@@ -50,7 +50,7 @@ pylint:
 
 .PHONY: upload
 upload:
-	twine upload ./dist/$(MODULE_NAME)-$(MODULE_VERSION)*
+	twine upload --config-file .pypirc ./dist/$(MODULE_NAME)-$(MODULE_VERSION)*
 
 .PHONY: clean
 clean:
