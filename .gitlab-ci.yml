@@ -18,9 +18,7 @@ cache:
   key: ${CI_PROJECT_ID}
 
 include:
-  # - template: License-Scanning.gitlab-ci.yml
   - template: Dependency-Scanning.gitlab-ci.yml
-  # - template: SAST.gitlab-ci.yml
 
 bandit-sast:
   trigger:
