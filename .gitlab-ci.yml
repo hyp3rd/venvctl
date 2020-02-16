@@ -26,6 +26,7 @@ bandit-sast:
   trigger:
     include:
       - template: SAST.gitlab-ci.yml
+    strategy: depend
   only:
     - master
 
@@ -35,7 +36,6 @@ license-scanning:
       - template: License-Scanning.gitlab-ci.yml
     strategy: depend
   only:
-    - development
     - master
 
 stages:
@@ -111,7 +111,7 @@ deploy:
   extends: .base-setup
   script:
     - pip3 install twine
-    - echo $PYPIRC_INI > .pypirc
+    - echo $PYPIRC_INI | base64 -d > .pypirc
     - make clean
     - make module
     - make upload
