@@ -9,7 +9,7 @@ variables:
   PIP_REQUIREMENTS_FILE: "requirements.txt"
   SAST_DEFAULT_ANALYZERS: "bandit"
   SAST_DISABLE_DIND: "true"
-  SAST_EXCLUDED_PATHS: ${CI_PROJECT_DIR}/build_cache,$CI_PROJECT_DIR/.cache/pip
+  SAST_EXCLUDED_PATHS: ${BUILD_CACHE}/*,${PIP_CACHE_DIR}/*
 
 cache:
   paths:
@@ -65,9 +65,9 @@ coverage:
   extends: .base-setup
   script:
     - pip3 install codecov
-    - coverage run -m module generate --config ./module/tests/config/venvs.json --out ${CI_PROJECT_DIR}/build_cache/venvs_coverage
+    - coverage run -m module generate --config ./module/tests/config/venvs.json --out ${BUILD_CACHE}/venvs_coverage
     - coverage report -m
-    - coverage html -d ${CI_PROJECT_DIR}/build_cache/tests/coverage
+    - coverage html -d ${BUILD_CACHE}/tests/coverage
     - bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
     - rm -rf ${CI_PROJECT_DIR}/build_cache/venvs_coverage
   only:
@@ -82,10 +82,10 @@ build:
       - rm -rf ${CI_PROJECT_DIR}/build_cache/venvs
       - pip3 install --upgrade -r requirements.txt
       - pip3 install --upgrade venvctl
-      - python -m venvctl generate --config ./module/tests/config/venvs.json --out ${CI_PROJECT_DIR}/build_cache/venvs
+      - python -m venvctl generate --config ./module/tests/config/venvs.json --out ${BUILD_CACHE}/venvs
   artifacts:
     paths:
-      - ${CI_PROJECT_DIR}/build_cache/venvs
+      - ${BUILD_CACHE}/venvs
   when: manual
   only:
     - master
@@ -94,6 +94,7 @@ deploy:
   stage: deploy
   extends: .base-setup
   script:
+    - pip3 install twine
     - echo $PYPIRC_INI > .pypirc
     - make clean
     - make module
@@ -106,6 +107,7 @@ deploy:
 .base-setup:
   before_script:
     - python --version
+    - rm -rf ${BUILD_CACHE}/venvs
     - mkdir -p $BUILD_CACHE
     - pip3 install --upgrade pip virtualenv pylint
     - virtualenv venv
