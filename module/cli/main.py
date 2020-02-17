@@ -14,33 +14,33 @@ import sys
 from typing import Optional, Dict, List, Any
 import click
 from ..main.venvctl import VenvCtl
-# from ..main.release import __version__
+from ..main.release import __version__
 
 
-# def version_info() -> Dict[str, str]:
-#     """Return full venvctl version info."""
-#     venvctl_version_string = __version__
-#     venvctl_version = venvctl_version_string.split()[0]
-#     venvctl_versions: List[Any] = venvctl_version.split('.')
-#     # pylint: disable=consider-using-enumerate
-#     for counter in range(len(venvctl_versions)):
-#         if venvctl_versions[counter] == "":
-#             venvctl_versions[counter] = 0
-#         try:
-#             venvctl_versions[counter] = int(venvctl_versions[counter])
-#         except Exception:  # pylint: disable=broad-except
-#             pass
-#     if len(venvctl_versions) < 3:
-#         for counter in range(len(venvctl_versions), 3):
-#             venvctl_versions.append(0)
-#     return {'string': venvctl_version_string.strip(),
-#             'full': venvctl_version,
-#             'major': venvctl_versions[0],
-#             'minor': venvctl_versions[1],
-#             'revision': venvctl_versions[2]}
+def version_info() -> Dict[str, str]:
+    """Return full venvctl version info."""
+    venvctl_version_string = __version__
+    venvctl_version = venvctl_version_string.split()[0]
+    venvctl_versions: List[Any] = venvctl_version.split('.')
+    # pylint: disable=consider-using-enumerate
+    for counter in range(len(venvctl_versions)):
+        if venvctl_versions[counter] == "":
+            venvctl_versions[counter] = 0
+        try:
+            venvctl_versions[counter] = int(venvctl_versions[counter])
+        except Exception:  # pylint: disable=broad-except
+            pass
+    if len(venvctl_versions) < 3:
+        for counter in range(len(venvctl_versions), 3):
+            venvctl_versions.append(0)
+    return {'string': venvctl_version_string.strip(),
+            'full': venvctl_version,
+            'major': venvctl_versions[0],
+            'minor': venvctl_versions[1],
+            'revision': venvctl_versions[2]}
 
 
-# @click.version_option(version=__version__)
+@click.version_option(version=version_info()["string"])
 @click.group()
 def cli() -> None:
     """Implement the default CLI group."""
