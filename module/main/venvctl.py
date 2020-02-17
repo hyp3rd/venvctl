@@ -16,7 +16,7 @@ import os
 import sys
 import errno
 import json
-from subprocess import Popen, PIPE
+import subprocess
 from pathlib import Path
 from typing import Any, List, Tuple, Dict, Optional
 import shutil
@@ -98,13 +98,13 @@ class VenvCtl:
             shutil.copytree(src=parent_path, dst=venv_path)
             return self.install_packages(venv_path, venv_packages)
 
-        process = Popen(
+        process = subprocess.run(
             [str(self.python_binary),
              "-m", "virtualenv",
-             "--activators", "bash", "--copies", venv_path],
-            stdout=PIPE, stderr=PIPE)
+             "--activators", "bash", "--copies", venv_path], check=True,
+            capture_output=True)
 
-        process.wait()
+        process.check_returncode()
 
         install_report, install_errors, exitcode = self.install_packages(
             venv_path, venv_packages)
