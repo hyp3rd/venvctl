@@ -120,7 +120,7 @@ deploy:
     paths:
       - ./dist/
   only:
-    - master
+    - release
     - tags
 
 .base-setup:
