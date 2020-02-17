@@ -41,18 +41,6 @@ __author__ = 'Hyper(d)'
 """
 
 
-def myversion():
-    from setuptools_scm.version import simplified_semver_version
-
-    def clean_scheme(version):
-        return simplified_semver_version(version)
-
-    return {
-        'local_scheme': "no-local-version",
-        'version_scheme': clean_scheme,
-    }
-
-
 def envstring(var: str) -> str:
     """Return environment var as string."""
     return os.environ.get(var) or ""
@@ -94,8 +82,6 @@ setuptools.setup(
         "version_scheme": 'python-simplified-semver',
         "local_scheme": "no-local-version",
     },
-
-    # use_scm_version=myversion,
 
     description=envstring("DESCRIPTION"),
     long_description=LONG_DESCRIPTION,
