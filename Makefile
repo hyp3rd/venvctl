@@ -54,6 +54,7 @@ upload:
 
 .PHONY: clean
 clean:
+	echo $(MODULE_VERSION) && \
 	rm -rf ./build ./dist ./*.egg-info \
 		&& find ./ -type l -maxdepth 1 |xargs rm -f \
 		&& find ./$(MODULE) -type d -name '__pycache__' |xargs rm -rf
