@@ -5,21 +5,6 @@
         ]
     },
     {
-        "name": "ansible_2_6",
-        "parent": "base",
-        "packages": [
-            "ansible==2.6",
-            "identify==1.4.11"
-        ]
-    },
-    {
-        "name": "ansible_2_7",
-        "parent": "base",
-        "packages": [
-            "ansible==2.7"
-        ]
-    },
-    {
         "name": "ansible_2_9",
         "parent": "base",
         "packages": [

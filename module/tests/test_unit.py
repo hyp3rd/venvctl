@@ -18,7 +18,7 @@ from typing import Any
 import glob
 from binaryornot.check import is_binary
 from ..main.venvctl import VenvCtl
-from ..utils import utils
+from ..utils import utils, configutils
 
 
 class TestMethods(unittest.TestCase):
@@ -36,7 +36,7 @@ class TestMethods(unittest.TestCase):
 
     def get_venvs_config(self) -> Any:
         """Get the venvs config file."""
-        return self.venvctl.get_config()
+        return configutils.get_config(self.get_config_file())
 
     def setUp(self) -> None:
         """Test setup."""
