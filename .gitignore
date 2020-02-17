@@ -86,3 +86,9 @@ python-venvs/*
 
 # other
 playground.*
+
+# release file
+release.py
+module/main/release.py
+*/release.py
+**/release.py
