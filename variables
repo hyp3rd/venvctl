@@ -1,6 +1,6 @@
 NAME="venvctl"
-VERSION=0.2.5
 AUTHOR="hyperd"
 AUTHOR_EMAIL="fc@hyperd.sh"
-DESCRIPTION="A python package to manage virtual environments programmatically."
+DESCRIPTION="A package to create portable virtual environments programmatically."
 URL="https://gitlab.com/hyperd/venvctl"
+DOCUMENTATION_URL="https://venvctl.readthedocs.io/en/latest/"

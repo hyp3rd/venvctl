@@ -110,6 +110,7 @@ deploy:
   script:
     - pip3 install twine
     - echo $PYPIRC_INI | base64 -d > .pypirc
+    # - echo $CI_COMMIT_TAG | tee -a ./variables
     - make clean
     - make module
     - make upload
@@ -120,6 +121,7 @@ deploy:
       - ./dist/
   only:
     - master
+    - tags
 
 .base-setup:
   before_script:

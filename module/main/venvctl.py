@@ -14,8 +14,8 @@ The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 
 import os
 import sys
-import errno
-import json
+# import errno
+# import json
 import subprocess
 from pathlib import Path
 from typing import Any, List, Tuple, Dict, Optional
@@ -80,14 +80,14 @@ class VenvCtl:
 
         return install_report, install_errors, exitcode
 
-    def get_config(self) -> Any:
-        """Get the venvs config file."""
-        if self.config_file.exists() and self.config_file.is_file():
-            with open(self.config_file, 'r') as file:
-                config = json.load(file)
-            return config
-        raise FileNotFoundError(
-            errno.ENOENT, os.strerror(errno.ENOENT), self.config_file)
+    # def get_config(self) -> Any:
+    #     """Get the venvs config file."""
+    #     if self.config_file.exists() and self.config_file.is_file():
+    #         with open(self.config_file, 'r') as file:
+    #             config = json.load(file)
+    #         return config
+    #     raise FileNotFoundError(
+    #         errno.ENOENT, os.strerror(errno.ENOENT), self.config_file)
 
     def __create_venv(self, venv_path: Path,
                       venv_packages: List[str],
@@ -163,7 +163,7 @@ class VenvCtl:
 
     def run(self) -> None:
         """Run the virtual environments generation."""
-        self.venvs = self.get_config()
+        self.venvs = configutils.get_config(self.config_file)
         try:
             configutils.validate_config(self.venvs)
         except AssertionError as error:
