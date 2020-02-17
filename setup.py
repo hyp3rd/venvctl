@@ -43,7 +43,8 @@ print(envstring("NAME"))
 
 setuptools.setup(
     name=envstring("NAME"),
-    version=envstring("VERSION"),
+    # version=envstring("VERSION"),
+    version=os.environ["CI_COMMIT_TAG"],
     author=envstring("AUTHOR"),
     author_email=envstring("AUTHOR_EMAIL"),
     description=envstring("DESCRIPTION"),

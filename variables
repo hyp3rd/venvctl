@@ -1,5 +1,4 @@
 NAME="venvctl"
-VERSION=0.2.5
 AUTHOR="hyperd"
 AUTHOR_EMAIL="fc@hyperd.sh"
 DESCRIPTION="A python package to manage virtual environments programmatically."

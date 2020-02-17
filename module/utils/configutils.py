@@ -10,6 +10,10 @@ The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 """
 
 from typing import Any, Dict, List
+from pathlib import Path
+import json
+import errno
+import os
 
 ERRORS = {
     "INVALID_CONFIG_OBJECT_TYPE": "The configuration object must be a list",
@@ -20,6 +24,16 @@ ERRORS = {
     """,
     "INVALID_ITEM_PARENT": "Invalid configuration item parent: \"__KEY__\""
 }
+
+
+def get_config(config_file: Path) -> Any:
+    """Get the venvs config file."""
+    if config_file.exists() and config_file.is_file():
+        with open(config_file, 'r') as file:
+            config = json.load(file)
+        return config
+    raise FileNotFoundError(
+        errno.ENOENT, os.strerror(errno.ENOENT), config_file)
 
 
 def valid_properties() -> Dict[Any, Any]:
