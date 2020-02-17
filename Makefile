@@ -10,8 +10,10 @@ PWD ?= pwd_unknown
 # retrieve NAME from /variables file
 MODULE_NAME = \
 	$(shell awk -F= '/^NAME\ ?=/{gsub(/\47|"/, "", $$NF);print $$NF;exit}' variables)
+# MODULE_VERSION = \
+# 	$(shell awk -F= '/^__version__\ ?=/{gsub(/\47|"/, "", $$NF);print $$NF;exit}' module/main/release.py)
 MODULE_VERSION = \
-	$(shell awk -F= '/^__version__\ ?=/{gsub(/\47|"/, "", $$NF);print $$NF;exit}' module/main/release.py)
+	$(shell awk -F= '/^VERSION\ ?=/{gsub(/\47|"/, "", $$NF);print $$NF;exit}' variables)
 
 # export such that its passed to shell functions for Docker to pick up.
 export MODULE_NAME
