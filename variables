@@ -1,4 +1,4 @@
-VERSION=0.4.11
+VERSION=0.4.13
 NAME="venvctl"
 AUTHOR="hyperd"
 AUTHOR_EMAIL="fc@hyperd.sh"
