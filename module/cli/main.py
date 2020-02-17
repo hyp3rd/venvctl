@@ -10,36 +10,37 @@ The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 """
 
 from pathlib import Path
-import os
 import sys
-from typing import Optional
+from typing import Optional, Dict, List, Any
 import click
 from ..main.venvctl import VenvCtl
+from ..main.release import __version__
 
 
-def getversion() -> str:
-    """Get version from variables file."""
-    varsfile = os.path.abspath(os.path.join(
-        os.path.dirname(__file__), '..', '..', 'variables'))
-    version = """
-    Could not determine version.
-    Are you sure a `variables` file exists in the root folder?
-    """
-    if os.path.isfile(varsfile):
+def version_info() -> Dict[str, str]:
+    """Return full venvctl version info."""
+    venvctl_version_string = __version__
+    venvctl_version = venvctl_version_string.split()[0]
+    venvctl_versions: List[Any] = venvctl_version.split('.')
+    # pylint: disable=consider-using-enumerate
+    for counter in range(len(venvctl_versions)):
+        if venvctl_versions[counter] == "":
+            venvctl_versions[counter] = 0
         try:
-            with open("variables", "r") as file:
-                variables = file.read().strip().split("\n")
-            for variable in variables:
-                key, value = variable.split("=")
-                if key == "VERSION":
-                    version = value
-                    break
-        except FileNotFoundError:
+            venvctl_versions[counter] = int(venvctl_versions[counter])
+        except Exception:  # pylint: disable=broad-except
             pass
-    return version
+    if len(venvctl_versions) < 3:
+        for counter in range(len(venvctl_versions), 3):
+            venvctl_versions.append(0)
+    return {'string': venvctl_version_string.strip(),
+            'full': venvctl_version,
+            'major': venvctl_versions[0],
+            'minor': venvctl_versions[1],
+            'revision': venvctl_versions[2]}
 
 
-@click.version_option(version=getversion())
+@click.version_option(version=version_info()["string"])
 @click.group()
 def cli() -> None:
     """Implement the default CLI group."""

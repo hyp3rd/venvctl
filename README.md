@@ -4,7 +4,7 @@
 
 [![pipeline status](https://gitlab.com/hyperd/venvctl/badges/master/pipeline.svg)](https://gitlab.com/hyperd/venvctl/-/commits/master)
 
-A python package to manage virtual enviroments programmatically and using CLI.
+A python package to create **portable** virtual enviroments programmatically and using CLI.
 
 ## Description
 

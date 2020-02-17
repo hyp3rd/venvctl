@@ -24,7 +24,7 @@ class Helpers:
     """Helper class."""
 
     @staticmethod
-    def set_envoironment():
+    def set_envoironment() -> None:
         """Set the environment."""
         sys.tracebacklimit = 0  # Avoid Traceback leaks
 
