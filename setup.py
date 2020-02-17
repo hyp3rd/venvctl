@@ -79,6 +79,8 @@ setuptools.setup(
         'write_to': 'module/main/release.py',
         'write_to_template': entry_points,
         'tag_regex': r'^(?P<prefix>v)?(?P<version>[^\+]+)(?P<suffix>.*)?$',
+        "version_scheme": 'python-simplified-semver',
+        "local_scheme": "no-local-version",
     },
 
     description=envstring("DESCRIPTION"),

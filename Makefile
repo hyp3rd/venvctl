@@ -15,6 +15,7 @@ MODULE_VERSION = \
 
 # export such that its passed to shell functions for Docker to pick up.
 export MODULE_NAME
+export MODULE_VERSION
 
 .PHONY: fork
 FILES = \
