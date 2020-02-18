@@ -90,6 +90,13 @@ class TestMethods(unittest.TestCase):
                                   in python_file.read())
                         self.assertTrue(verify, "The shebang fix is present.")
 
+    def test_g_reports_are_present(self) -> None:
+        """Assert that the reports are generated in the correct folder."""
+        target_path = f'{self.get_venv_base_path()}/reports'
+        for venv in self.get_venvs_config():
+            test_is_file = Path(f'{target_path}/{venv["name"]}.md').is_file()
+            self.assertTrue(test_is_file)
+
 
 if __name__ == '__main__':
     unittest.main()
