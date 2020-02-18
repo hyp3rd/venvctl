@@ -40,7 +40,7 @@ def version_info() -> Dict[str, str]:
             'revision': venvctl_versions[2]}
 
 
-@click.version_option(version=__version__)
+@click.version_option(version=version_info()["string"])
 @click.group()
 def cli() -> None:
     """Implement the default CLI group."""
