@@ -58,4 +58,4 @@ class Reports:
                 key, val))
 
         cls.generate_report(
-            Path(f'{reports_path}/reports'), venv_name, all_reports, exitcode)
+            reports_path, venv_name, all_reports, exitcode)
