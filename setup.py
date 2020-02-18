@@ -13,10 +13,10 @@ This module is part of VenvCtl: <https://pypi.org/project/venvctl/>.
 The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 """
 from __future__ import (absolute_import, division, print_function)
-# import codecs
+import codecs
 import os
 import re
-# from typing import Any
+from typing import Any
 import setuptools
 
 entry_points: str = """\"""THIS SOFTWARE IS PROVIDED AS IS.
@@ -46,13 +46,13 @@ def envstring(var: str) -> str:
     return os.environ.get(var) or ""
 
 
-# def read(rel_path: str) -> Any:
-#     """Read file helper."""
-#     here = os.path.abspath(os.path.dirname(__file__))
-#     # intentionally *not* adding an encoding option to open, See:
-#     #   https://github.com/pypa/virtualenv/issues/201#issuecomment-3145690
-#     with codecs.open(os.path.join(here, rel_path), 'r') as file_path:
-#         return file_path.read()
+def read(rel_path: str) -> Any:
+    """Read file helper."""
+    here = os.path.abspath(os.path.dirname(__file__))
+    # intentionally *not* adding an encoding option to open, See:
+    #   https://github.com/pypa/virtualenv/issues/201#issuecomment-3145690
+    with codecs.open(os.path.join(here, rel_path), 'r') as file_path:
+        return file_path.read()
 
 
 try:
@@ -79,8 +79,8 @@ setuptools.setup(
         'write_to': 'module/main/release.py',
         'write_to_template': entry_points,
         'tag_regex': r'^(?P<prefix>v)?(?P<version>[^\+]+)(?P<suffix>.*)?$',
-        "version_scheme": 'python-simplified-semver',
-        'local_scheme': 'no - local - version',
+        'version_scheme': 'python-simplified-semver',
+        'local_scheme': 'no-local-version',
     },
 
     description=envstring("DESCRIPTION"),
@@ -129,7 +129,7 @@ setuptools.setup(
     packages=[
         envstring("NAME"), envstring("NAME") + ".main",
         envstring("NAME"), envstring("NAME") + ".utils",
-        envstring("NAME"), envstring("NAME") + ".cli"
+        envstring("NAME"), envstring("NAME") + ".cli",
     ],
 
     entry_points={
