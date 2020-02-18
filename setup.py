@@ -36,8 +36,8 @@ from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type  # pylint: disable=invalid-name
 
-__version__ = '{version}'
-__author__ = 'Hyper(d)'
+__version__ = \"{version}\"
+__author__ = \"Hyper(d)\"
 """
 
 
@@ -76,8 +76,8 @@ setuptools.setup(
 
     # Version SCM based.
     use_scm_version={
-        # 'write_to': 'module/main/release.py',
-        # 'write_to_template': entry_points,
+        'write_to': 'module/main/release.py',
+        'write_to_template': entry_points,
         'tag_regex': r'^(?P<prefix>v)?(?P<version>[^\+]+)(?P<suffix>.*)?$',
         "version_scheme": 'python-simplified-semver',
         "local_scheme": "no-local-version",

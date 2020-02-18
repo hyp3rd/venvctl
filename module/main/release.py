@@ -11,8 +11,9 @@ VenvCtl is a wrapper around virtualenv.
 This module is part of VenvCtl: <https://pypi.org/project/venvctl/>.
 The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 """
-from __future__ import absolute_import, division, print_function
+from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type  # pylint: disable=invalid-name
 
-__version__ = '0.5.0'
+__version__ = "0.5.1.dev0"
+__author__ = "Hyper(d)"
