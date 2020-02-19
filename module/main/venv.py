@@ -5,7 +5,7 @@ Released under GNU General Public License:
 
 USE IT AT YOUR OWN RISK.
 
-Venv object
+Venv serializeble / deserializable object
 
 This module is part of VenvCtl: <https://pypi.org/project/venvctl/>.
 The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
