@@ -97,6 +97,28 @@ class TestMethods(unittest.TestCase):
             test_is_file = Path(f'{target_path}/{venv["name"]}.md').is_file()
             self.assertTrue(test_is_file)
 
+    def test_f_single_venv_creation(self) -> None:
+        """Assert that a single venv is created."""
+        name = "test-venv"
+        packages = [
+            "piphyperd==1.5.5",
+            "markd==0.1.19",
+            "Click==7.0",
+            "binaryornot==0.4.4"
+        ]
+        venv_path = f'{self.get_venv_base_path()}/{name}'
+
+        VenvCtl.create_venv(name=name, packages=packages)
+
+        # test venv is created
+        self.assertTrue(os.path.isdir(venv_path))
+
+        # venv integrity test
+        pip_freeze_report, _, _ = self.venvctl.audit(
+            Path(venv_path))
+        for package in packages:
+            self.assertIn(package, pip_freeze_report)
+
 
 if __name__ == '__main__':
     unittest.main()
