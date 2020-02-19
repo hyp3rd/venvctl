@@ -12,6 +12,7 @@ The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 """
 
 import unittest
+from pathlib import Path
 from ..utils import configutils
 
 
@@ -155,6 +156,24 @@ class TestMethods(unittest.TestCase):
             configutils.ERRORS["INVALID_ITEM_PARENT"].replace(
                 "__KEY__", "whatever"),
             str(error.exception))
+
+    def test_config_is_generated(self) -> None:
+        """Assert that a configuration file is generated and is valid."""
+        packages = [
+            "piphyperd==1.5.5",
+            "markd==0.1.19",
+            "click==7.0",
+            "binaryornot==0.4.4"
+        ]
+        config_file = configutils.generate_config(
+            name="test", packages=packages)
+
+        self.assertTrue(Path(config_file).is_file(), "{config} exists.")
+
+        config = configutils.get_config(config_file)
+
+        self.assertTrue(configutils.validate_config(
+            config), "{config} is valid")
 
 
 if __name__ == '__main__':
