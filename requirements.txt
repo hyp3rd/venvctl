@@ -1,4 +1,4 @@
-piphyperd==1.5.5
+piphyperd==1.6.7
 markd==0.1.19
 virtualenv==20.0.3
 click==7.0
