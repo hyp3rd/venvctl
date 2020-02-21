@@ -82,13 +82,8 @@ venvctl
 # find . -type l | sed -e s'/^\.\///g' >> .gitignore
 
 # venvs folder
-python-venvs/*
+python-venvs
+venvs-config
 
 # other
 playground.*
-
-# release file
-# release.py
-# module/main/release.py
-# */release.py
-# **/release.py
