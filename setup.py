@@ -82,7 +82,7 @@ setuptools.setup(
     },
 
     description=envstring("DESCRIPTION"),
-    long_description=LONG_DESCRIPTION,
+    long_description=LONG_DESCRIPTION.encode("UTF-8"),
     long_description_content_type="text/markdown",
 
     license='GPLv3',
