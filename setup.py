@@ -56,15 +56,13 @@ def read(rel_path: str) -> Any:
 
 
 try:
-    with open("README.md", "r") as fh:
-        LONG_DESCRIPTION = fh.read()
+    LONG_DESCRIPTION = read("README.md")
 except FileNotFoundError:
     LONG_DESCRIPTION = ""
 
 if os.path.isfile("variables"):
     try:
-        with open("variables", "r") as fh:
-            VARIABLES = fh.read().strip().split("\n")
+        VARIABLES = read("variables").strip().split("\n")
         for v in VARIABLES:
             key, value = v.split("=")
             os.environ[key] = re.sub("['\"]", "", value)
@@ -119,7 +117,7 @@ setuptools.setup(
     ],
 
     install_requires=[
-        'piphyperd==1.5.5',
+        'piphyperd==1.6.7',
         'markd==0.1.19',
         'virtualenv==20.0.3',
         'click==7.0',
