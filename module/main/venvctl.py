@@ -14,8 +14,6 @@ The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 
 import os
 import sys
-# import errno
-# import json
 import subprocess
 from pathlib import Path
 from typing import Any, List, Tuple, Dict, Optional
@@ -38,12 +36,12 @@ class VenvCtl:
         Init the venvctl.
 
         config_path -- Path to the venvs config file)
-        output_dir -- Directory path to output the venvs artifacts
+        output_dir -- Venv(s) path (default: ./python-venvs)
         """
         # set the environment
         utils.Helpers().set_envoironment()
         # venvs config file
-        self.config_file: Path = Path(config_file)
+        self.config_file: Path = config_file
         # venvs base dir
         default_dir = Path(f'{os.getcwd()}/python-venvs')
         # venvs output directory
@@ -52,6 +50,15 @@ class VenvCtl:
         self.venvs: List[Any] = []
         # path to the python binary to use
         self.python_binary = python_binary if python_binary else sys.executable
+
+    @classmethod
+    def create_venv(cls, name: str,
+                    packages: List[str],
+                    output_dir: Optional[Path] = None,) -> None:
+        """Create a virtual environment."""
+        config_file = configutils.generate_config(name, packages)
+
+        cls(config_file=config_file, output_dir=output_dir).run()
 
     @staticmethod
     def audit(venv_path: Path) -> Tuple[str, str, str]:
@@ -80,15 +87,6 @@ class VenvCtl:
 
         return install_report, install_errors, exitcode
 
-    # def get_config(self) -> Any:
-    #     """Get the venvs config file."""
-    #     if self.config_file.exists() and self.config_file.is_file():
-    #         with open(self.config_file, 'r') as file:
-    #             config = json.load(file)
-    #         return config
-    #     raise FileNotFoundError(
-    #         errno.ENOENT, os.strerror(errno.ENOENT), self.config_file)
-
     def __create_venv(self, venv_path: Path,
                       venv_packages: List[str],
                       parent_path: Optional[Path]) -> Tuple[str, str, int]:
@@ -110,7 +108,7 @@ class VenvCtl:
             venv_path, venv_packages)
 
         # Apply fix to /bin/activate
-        utils.Helpers().apply_bash_activation_fix(venv_path)
+        utils.Helpers().bash_activation_fixer(venv_path)
 
         return install_report, install_errors, exitcode
 
