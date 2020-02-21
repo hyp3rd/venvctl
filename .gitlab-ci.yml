@@ -61,6 +61,9 @@ code-quality:
   script:
     - pip3 install mypy
     - mypy --strict module/main/venvctl.py
+    - mypy --strict module/main/venv.py
+    - mypy --strict module/utils/utils.py
+    - mypy --strict module/utils/configutils.py
     - mypy --strict module/cli/main.py
     - mypy --strict module/tests/test_*.py
   allow_failure: true

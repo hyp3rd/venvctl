@@ -9,11 +9,14 @@ This module is part of VenvCtl: <https://pypi.org/project/venvctl/>.
 The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 """
 
+from __future__ import (absolute_import, division, print_function)
 from typing import Any, Dict, List
 from pathlib import Path
 import json
 import errno
 import os
+from ..utils import utils
+from ..main.venv import Venv
 
 ERRORS = {
     "INVALID_CONFIG_OBJECT_TYPE": "The configuration object must be a list",
@@ -24,6 +27,34 @@ ERRORS = {
     """,
     "INVALID_ITEM_PARENT": "Invalid configuration item parent: \"__KEY__\""
 }
+
+
+def generate_config(name: str,
+                    packages: List[str]) -> Path:
+    """Generate a venv config file."""
+    venv = Venv(name=name, packages=packages)
+    venvs = list()
+    venvs.append(venv)
+
+    # Serializing
+    data = json.dumps(venvs, default=lambda o: o.__dict__,
+                      sort_keys=False, indent=4)
+
+    # base storage dir for the config file(s)
+    base_config_path = utils.Helpers.get_venvs_config_base_path()
+
+    # ensure the base storage dir exists
+    if not Path(base_config_path).is_dir():
+        os.mkdir(base_config_path)
+
+    file_path = Path(f'{base_config_path}/{name}.config.json')
+
+    with open(file_path, 'w',
+              encoding='utf-8') as config_file:
+        json.dump(json.loads(data), config_file,
+                  sort_keys=False, ensure_ascii=False, indent=4)
+
+    return file_path
 
 
 def get_config(config_file: Path) -> Any:

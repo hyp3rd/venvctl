@@ -29,6 +29,11 @@ class Helpers:
         sys.tracebacklimit = 0  # Avoid Traceback leaks
 
     @staticmethod
+    def get_venvs_config_base_path() -> Path:
+        """Return the base config file path."""
+        return Path(f'{os.getcwd()}/venvs-config')
+
+    @staticmethod
     def get_shebang_fix() -> str:
         """FIX: the shebang in python files."""
         return '#!/usr/bin/env python'
@@ -43,7 +48,7 @@ class Helpers:
         return 'VIRTUAL_ENV=$(cd $(dirname "$BASH_SOURCE"); dirname `pwd`)'
 
     @classmethod
-    def apply_bash_activation_fix(cls, venv_path: Path) -> None:
+    def bash_activation_fixer(cls, venv_path: Path) -> None:
         """Apply fix to /bin/activate."""
         with open(f'{venv_path}/bin/activate', 'r') as activate_file:
             content = activate_file.read()
