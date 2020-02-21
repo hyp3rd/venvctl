@@ -15,5 +15,5 @@ from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type  # pylint: disable=invalid-name
 
-__version__ = "0.5.15"
+__version__ = "0.5.16"
 __author__ = "Hyper(d)"
