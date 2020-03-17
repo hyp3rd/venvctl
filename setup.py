@@ -119,8 +119,8 @@ setuptools.setup(
     install_requires=[
         'piphyperd==1.8.3',
         'markd==0.1.20',
-        'virtualenv==20.0.3',
-        'click==7.0',
+        'virtualenv==20.0.10',
+        'click8==8.0.1',
         'binaryornot==0.4.4',
     ],
 
