@@ -100,7 +100,7 @@ class VenvCtl:
             [str(self.python_binary),
              "-m", "virtualenv",
              "--activators", "bash", "--copies", venv_path], check=True,
-            capture_output=True)
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         process.check_returncode()
 
