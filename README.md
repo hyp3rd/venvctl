@@ -29,7 +29,7 @@
 **venvctl** relies on a few packages to explicate its core functionalities:
 
 ```text
-piphyperd==1.7.3
+piphyperd==1.9.1
 ```
 
 [piphyperd](https://gitlab.com/hyperd/piphyperd/), a wrapper around `pip` to manage installations and audits.
