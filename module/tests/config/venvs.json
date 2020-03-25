@@ -1,21 +1,31 @@
-[{
+[
+    {
         "name": "base",
         "packages": [
-            "docker==4.1.0"
+            "asn1crypto==1.3.0",
+            "dnspython==1.16.0"
         ]
     },
     {
-        "name": "ansible_2_9",
-        "parent": "base",
-        "packages": [
-            "ansible==2.9"
-        ]
+      "name": "base_networking",
+      "parent": "base",
+      "packages": [
+        "f5-sdk==3.0.21"
+      ]
     },
     {
-        "name": "ansible_2_9_networking",
-        "parent": "ansible_2_9",
-        "packages": [
-            "tox==3.12.1"
-        ]
+      "name": "ansible_2_9",
+      "parent": "base",
+      "packages": [
+          "ansible==2.9.6"
+      ]
+    },
+    {
+      "name": "ansible_2_9_networking",
+      "parent": "base_networking",
+      "packages": [
+          "ansible==2.9.6"
+      ]
     }
 ]
+  

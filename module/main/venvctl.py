@@ -99,7 +99,7 @@ class VenvCtl:
         process = subprocess.run(
             [str(self.python_binary),
              "-m", "virtualenv",
-             "--activators", "bash", "--copies", venv_path], check=True,
+             "--activators", "bash,python", "--always-copy", venv_path], check=True,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         process.check_returncode()
