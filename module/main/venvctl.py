@@ -96,10 +96,15 @@ class VenvCtl:
             shutil.copytree(src=parent_path, dst=venv_path)
             return self.install_packages(venv_path, venv_packages)
 
+        # If the virtualenv already exists, remove it
+        if Path(venv_path).is_dir():
+            shutil.rmtree(venv_path)
+
         process = subprocess.run(
             [str(self.python_binary),
              "-m", "virtualenv",
-             "--activators", "bash,python", "--always-copy", venv_path], check=True,
+             "--activators", "bash,python", "--always-copy", venv_path],
+            check=True,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         process.check_returncode()

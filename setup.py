@@ -104,6 +104,8 @@ setuptools.setup(
         'Intended Audience :: Information Technology',
         'Intended Audience :: System Administrators',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
@@ -135,6 +137,6 @@ setuptools.setup(
         ]
     },
 
-    python_requires='>=3.5.*',
+    python_requires='>=2.7, >=3.5.*',
     zip_safe=False,
 )
