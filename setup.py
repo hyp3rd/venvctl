@@ -137,6 +137,6 @@ setuptools.setup(
         ]
     },
 
-    python_requires='>=3.5.*',
+    python_requires='>-2.6, >=3.5.*',
     zip_safe=False,
 )
