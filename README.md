@@ -6,11 +6,11 @@
 
 ![Python package](https://github.com/hyp3rd/venvctl/workflows/Python%20package/badge.svg)
 
-**venvctl** is a tool allowing the creation of **portable Python virtual environments**.
+**venvctl** is a CLI tool allowing the creation of fully **portable Python virtual environments**.
 
 ## Synopsis
 
-**venvctl** helps to build __fully portable__ Python virtual environments, in **bulk**, or **single** mode, keeping the state in **config files**. Each virtual environment comes with a detailed markdown report, allowing you to control the integrity of its state, broken dependencies, errors, and warnings that occurred in the build process. Eventually, the folders ready for distributions get packed in tarballs, as shown in the folders tree example below:
+**venvctl** helps building __fully portable__ Python virtual environments, in **bulk**, or **single** mode, keeping the state in **config files**. Each virtual environment comes with a detailed markdown report, allowing to control the integrity of its state, broken dependencies, errors, and warnings that occurred in the build process. Eventually, the folders ready for distributions get packed in tarballs, as shown in the example below:
 
 ```bash
 ...
@@ -24,12 +24,18 @@
     └── base.md
 ```
 
+## Limitations
+
+It is evident that the portability is limited to systems sharing the same kernel, **do not expect** to build a virtual environment on a **Debian** based system, and deploy it on a **RHEL** host, to mention one of the many cases;
+
+It is possible shipping a virtual environment with a different version of python other than the one installed on the destination system, yet again, do not assume to run python3 based venvs on a system solely configured with python 2.x.
+
 ## Requirements
 
 **venvctl** relies on a few packages to explicate its core functionalities:
 
 ```text
-piphyperd==1.9.1
+piphyperd==1.9.6
 ```
 
 [piphyperd](https://gitlab.com/hyperd/piphyperd/), a wrapper around `pip` to manage installations and audits.
@@ -41,8 +47,8 @@ markd==0.1.20
 [markd](https://github.com/pantsel/markd), a Python package that facilitates the generation of markdown flavored files.
 
 ```text
-virtualenv==20.0.3  # Virtual Python Environment builder.
-click==7.0  # Composable command line interface toolkit.
+virtualenv==20.0.14  # Virtual Python Environment builder.
+click8==8.0.1  # Composable command line interface toolkit.
 binaryornot==0.4.4  # Ultra-lightweight pure Python package to check if a file is binary or text.
 ```
 
@@ -71,7 +77,8 @@ venvctl generate \
 A config file follows the json structure:
 
 ```json
-[{
+[
+    {
         "name": "base",
         "packages": [
             "docker==4.1.0"
