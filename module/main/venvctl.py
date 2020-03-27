@@ -63,7 +63,9 @@ class VenvCtl:
     @staticmethod
     def audit(venv_path: Path) -> Tuple[str, str, str]:
         """Run audit against a specific virtual environment."""
-        piphyperd = PipHyperd(python_path=Path(f'{venv_path}/bin/python3'))
+        python_binary = utils.Helpers().detect_python_binary(venv_path)
+
+        piphyperd = PipHyperd(python_path=python_binary)
 
         pip_freeze_report, _, _ = piphyperd.freeze()
         pip_check_report, _, _ = piphyperd.check()
@@ -76,8 +78,10 @@ class VenvCtl:
     def install_packages(venv_path: Path,
                          venv_packages: List[str]) -> Tuple[str, str, int]:
         """Install packages within a specific virtual environment."""
+        python_binary = utils.Helpers().detect_python_binary(venv_path)
+
         piphyperd = PipHyperd(
-            python_path=Path(f'{venv_path}/bin/python3'))
+            python_path=python_binary)
 
         install_report, install_errors, exitcode = piphyperd.install(
             *venv_packages)
