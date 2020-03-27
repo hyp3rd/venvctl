@@ -13,6 +13,7 @@ from pathlib import Path
 import sys
 from typing import Optional, Dict, List, Any
 import click
+from .options import PythonLiteralOption
 from ..main.venvctl import VenvCtl
 from ..main.release import __version__
 
@@ -55,7 +56,7 @@ def generate(config: str,
              out: Optional[str] = None,
              python: Optional[str] = None) -> None:
     """
-    Generate command.
+    Generate virtual environments in batch, based on a config file.
 
     Creates virtual envs and corresponding reports,
     based on a predefined configuration.
@@ -68,15 +69,17 @@ def generate(config: str,
             output_dir=output_dir).run()
 
 
-@cli.command()
+@cli.command(context_settings=dict(help_option_names=['-h', '--help']))
 @click.option('--name', required=True,
               help='Name of the virtual env')
-@click.option('--packages', required=True, help='Packages to install')
+@click.option('--packages', required=True, cls=PythonLiteralOption,
+              default=[],
+              help='Packages to install, e.g.: \'["ansible", "tox"]\'')
 @click.option('--out', required=False, help='Virtual env output folder')
 def create(name: str, packages: List[str],
            out: Optional[str] = None) -> None:
     """
-    Create command.
+    Create a single virtual environment.
 
     Creates a virtual env and corresponding reports,
     initializing it with a list of packages.
@@ -84,6 +87,8 @@ def create(name: str, packages: List[str],
     venv_name = name
     output_dir = None if out is None else Path(out)
     packages_list = packages
+
+    print(packages_list)
 
     VenvCtl.create_venv(name=venv_name, packages=packages_list,
                         output_dir=output_dir)

@@ -101,8 +101,6 @@ class TestMethods(unittest.TestCase):
         """Assert that a single venv is created."""
         name = "test-venv"
         packages = [
-            "piphyperd==1.5.5",
-            "markd==0.1.19",
             "Click==7.0",
             "binaryornot==0.4.4"
         ]
