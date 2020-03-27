@@ -72,7 +72,7 @@ def generate(config: str,
 @click.option('--name', required=True,
               help='Name of the virtual env')
 @click.option('--packages', required=True, help='Packages to install')
-@click.option('--out', required=False, help='Virtual envs output folder')
+@click.option('--out', required=False, help='Virtual env output folder')
 def create(name: str, packages: List[str],
            out: Optional[str] = None) -> None:
     """
