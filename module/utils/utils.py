@@ -17,6 +17,7 @@ import io
 import re
 import glob
 from pathlib import Path
+from typing import List
 from binaryornot.check import is_binary
 
 
@@ -26,7 +27,7 @@ class Helpers:
     @staticmethod
     def set_envoironment() -> None:
         """Set the environment."""
-        sys.tracebacklimit = 0  # Avoid Traceback leaks
+        sys.tracebacklimit = 1  # Avoid Traceback leaks
 
     @staticmethod
     def get_venvs_config_base_path() -> Path:
@@ -77,6 +78,22 @@ class Helpers:
 
                 with open(child, 'w') as python_file:
                     python_file.write(content)
+
+    @staticmethod
+    def detect_python_binary(venv_path: Path) -> Path:
+        """Detect the python binary installed in a given virtual env."""
+        python_version_paths: List[str] = [
+            f"{venv_path}/bin/python",
+            f"{venv_path}/bin/python2",
+            f"{venv_path}/bin/python3"
+        ]
+
+        for python_version in python_version_paths:
+            version_selected = Path(python_version)
+            if version_selected.is_file():
+                return version_selected
+
+        raise FileNotFoundError()
 
     @staticmethod
     def packer(venv_path: Path, venv_name: str) -> str:
