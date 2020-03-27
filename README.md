@@ -47,7 +47,7 @@ markd==0.1.20
 [markd](https://github.com/pantsel/markd), a Python package that facilitates the generation of markdown flavored files.
 
 ```text
-virtualenv==20.0.14  # Virtual Python Environment builder.
+virtualenv==20.0.15  # Virtual Python Environment builder.
 click8==8.0.1  # Composable command line interface toolkit.
 binaryornot==0.4.4  # Ultra-lightweight pure Python package to check if a file is binary or text.
 ```
@@ -66,44 +66,133 @@ Visit the [project page](https://pypi.org/project/venvctl/) for further informat
 
 For the detailed instructions and a full API walkthroug, refer to the [Official Documenation](https://venvctl.readthedocs.io/en/latest/).
 
-You can leverage **venvctl** both programmatically, or calling the CLI, as shown in the example below:
+You can leverage **venvctl** both programmatically, or calling the CLI, as shown in the examples below:
+
+```python
+"""Python"""
+from venvctl import VenvCtl
+
+# Build virtualenvs in batch
+VenvCtl(config_file=/path/to/config.json,
+        python_binary=/usr/bin/python{version},
+        output_dir=/my/output/dir).run()
+```
 
 ```bash
+#!/bin/bash
+
+# Build virtualenvs in batch
 venvctl generate \
     --config ~/path/to/your/config/venvs.json \
     --out ./venvs
+```
+
+```python
+"""Python"""
+from venvctl import VenvCtl
+
+name = "test-venv"
+packages = [
+    "Click==7.0",
+    "binaryornot==0.4.4"
+]
+
+# Build a single virtual env;
+# It will generate the config file for you.
+VenvCtl.create_venv(name=name, packages=packages_list,
+                    output_dir=/my/output/dir)
+```
+
+```bash
+#!/bin/bash
+
+# Build a single virtual env;
+# It will generate the config file for you.
+venvctl create --name my_venv --packages '["tox", "docker"]' --out /my/output/dir
 ```
 
 A config file follows the json structure:
 
 ```json
 [
-    {
-        "name": "base",
-        "packages": [
-            "docker==4.1.0"
-        ]
-    },
-    {
-        "name": "ansible_2_9",
-        "parent": "base",
-        "packages": [
-            "ansible==2.9"
-        ]
-    },
-    {
-        "name": "ansible_2_9_tox",
-        "parent": "ansible_2_9",
-        "packages": [
-            "tox==3.12.1"
-        ]
-    }
+  {
+      "name": "base",
+      "packages": [
+          "asn1crypto==1.3.0",
+          "dnspython==1.16.0",
+          "enum34==1.1.10",
+          "ipaddress==1.0.23",
+          "jmespath==0.9.5",
+          "lxml==4.5.0",
+          "paramiko==2.7.1",
+          "psutil==5.7.0",
+          "pycrypto==2.6.1",
+          "pyopenssl==19.1.0",
+          "python-ldap==3.2.0",
+          "python-memcached==1.59"
+      ]
+  },
+  {
+    "name": "base_networking",
+    "parent": "base",
+    "packages": [
+      "f5-sdk==3.0.21",
+      "bigsuds==1.0.6",
+      "netaddr==0.7.19",
+      "cloudshell-networking-cisco-iosxr==4.0.6"
+    ]
+  },
+  {
+    "name": "ansible_2_9",
+    "parent": "base",
+    "packages": [
+        "ansible==2.9.6"
+    ]
+  },
+  {
+    "name": "ansible_2_9_networking",
+    "parent": "base_networking",
+    "packages": [
+        "ansible==2.9.6"
+    ]
+  }
 ]
 ```
 
 The build process follows an inheritance pattern, in the example above, the environment named `base` is the core for the rest; `ansible_2_9` inherits its packages; `ansible_2_9_tox` adds modules on the top of its **parent**, `ansible_2_9`.
 
 With this logic, the build process in bulk can be quite fast, even when deploying complex virtual environments.
+
+## Run it with Containers
+
+You can also take advantage of a [**container image**](https://gitlab.com/hyperd/factory/-/tree/master/python/centos), built to ship **venvctl** and the whole toolchain to build virutal environments leveraging both **Python 2** and **Python 3**.
+Here to follow, two examples leveraging **Docker**.
+
+Build virtual environments in batch, shipping Python 3.6.8 shipped with RHEL based systems:
+
+```bash
+docker run -it --rm -v $(pwd)/conf.json:/opt/conf.json \
+  -v $(pwd)/venvs:/opt/venvs:rw \
+  eu.gcr.io/hyperd-containers/venv-builder:latest venvctl generate \
+  --config /opt/conf.json \
+  --out /opt/venvs \
+```
+
+Build virtual environments in batch, shipping Python 2.7.16:
+
+```bash
+docker run -it --rm -v $(pwd)/conf.json:/opt/conf.json \
+  -v $(pwd)/venvs:/opt/venvs:rw \
+  eu.gcr.io/hyperd-containers/venv-builder:latest venvctl generate \
+  --config /opt/conf.json \
+  --out /opt/venvs \
+  --python /usr/bin/python2
+```
+
+### Containers limitations
+
+Currently, the only image available is based on **CentOS 8**. It fits the purpose of any **RHEL** based deployments, however it won't be useful in other scenarios.
+More kernels will be added, stay tuned, or feel free to build your own and poke us.
 
 ## License
 
