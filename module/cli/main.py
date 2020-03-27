@@ -68,6 +68,27 @@ def generate(config: str,
             output_dir=output_dir).run()
 
 
+@cli.command()
+@click.option('--name', required=True,
+              help='Name of the virtual env')
+@click.option('--packages', required=True, help='Packages to install')
+@click.option('--out', required=False, help='Virtual envs output folder')
+def create(name: str, packages: List[str],
+           out: Optional[str] = None) -> None:
+    """
+    Create command.
+
+    Creates a virtual env and corresponding reports,
+    initializing it with a list of packages.
+    """
+    venv_name = name
+    output_dir = None if out is None else Path(out)
+    packages_list = packages
+
+    VenvCtl.create_venv(name=venv_name, packages=packages_list,
+                        output_dir=output_dir)
+
+
 def run() -> None:
     """Run the CLI."""
     try:
