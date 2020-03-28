@@ -192,7 +192,7 @@ docker run -it --rm -v $(pwd)/conf.json:/opt/conf.json \
 ### Containers limitations
 
 Currently, the container image available is based on **CentOS 8**. It fits the purpose of any **RHEL** based deployment; however, it won't be useful in other scenarios.
-More kernels will be added, stay tuned, or feel free to build your own and poke us.
+More kernels will be added, stay tuned, or feel free to build your own and poke me.
 
 ## License
 
