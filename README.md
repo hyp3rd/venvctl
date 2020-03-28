@@ -10,7 +10,7 @@
 
 ## Synopsis
 
-**venvctl** helps building __fully portable__ Python virtual environments, in **bulk**, or **single** mode, keeping the state in **config files**. Each virtual environment comes with a detailed markdown report, allowing to control the integrity of its state, broken dependencies, errors, and warnings that occurred in the build process. Eventually, the folders ready for distributions get packed in tarballs, as shown in the example below:
+**venvctl** helps to build __fully portable__ Python virtual environments, in **bulk**, or **single** mode, keeping the state in **config files**. Each virtual environment comes with a detailed markdown report, to overview the integrity of its state, broken dependencies, errors, and warnings that occurred in the build process. Eventually, the folders ready for distributions get packed in tarballs, as shown in the example below:
 
 ```bash
 ...
@@ -165,10 +165,10 @@ With this logic, the build process in bulk can be quite fast, even when deployin
 
 ## Run it with Containers
 
-You can also take advantage of a [**container image**](https://gitlab.com/hyperd/factory/-/tree/master/python/centos), built to ship **venvctl** and the whole toolchain to build virutal environments leveraging both **Python 2** and **Python 3**.
-Here to follow, two examples leveraging **Docker**.
+It is possible to take advantage of a [**container image**](https://gitlab.com/hyperd/factory/-/tree/master/python/centos), built to ship **venvctl** and the whole toolchain to create virtual environments leveraging both **Python 2** and **Python 3**.
+Here to follow, two examples running **Docker**.
 
-Build virtual environments in batch, shipping Python 3.6.8 shipped with RHEL based systems:
+Build virtual environments in bulk, shipping Python 3.6.8:
 
 ```bash
 docker run -it --rm -v $(pwd)/conf.json:/opt/conf.json \
@@ -178,7 +178,7 @@ docker run -it --rm -v $(pwd)/conf.json:/opt/conf.json \
   --out /opt/venvs \
 ```
 
-Build virtual environments in batch, shipping Python 2.7.16:
+Build virtual environments in bulk, shipping Python 2.7.16:
 
 ```bash
 docker run -it --rm -v $(pwd)/conf.json:/opt/conf.json \
@@ -191,7 +191,7 @@ docker run -it --rm -v $(pwd)/conf.json:/opt/conf.json \
 
 ### Containers limitations
 
-Currently, the only image available is based on **CentOS 8**. It fits the purpose of any **RHEL** based deployments, however it won't be useful in other scenarios.
+Currently, the container image available is based on **CentOS 8**. It fits the purpose of any **RHEL** based deployment; however, it won't be useful in other scenarios.
 More kernels will be added, stay tuned, or feel free to build your own and poke us.
 
 ## License
