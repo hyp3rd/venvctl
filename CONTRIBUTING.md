@@ -7,8 +7,8 @@ Note, we have a [code of conduct](./CODE_OF_CONDUCT.md), please follow it in all
 ## Pull Request Process
 
 1. Ensure to honor the .gitignore, and do not submit secret;
-2. Update the README.md with details of changes to the interface, both referring to the code and the CLI, including new environment
-   variables, dependencies, useful file locations, flags, and container parameters;
+2. Update the [README.md](./README.md) with details of changes to the interface, both referring to the code and the CLI, including new environment
+   variables, dependencies, useful file locations, flags, and container parameters. We do mind the grammar and the correctness of the language;
 3. Increase the version numbers in the release.py file and the README.md to the release that this
    Pull Request would represent. The versioning scheme we use is [SemVer](http://semver.org/);
 4. Ensure that your submissions are not breaking any existing code, and to add each new functionality to the unit testing;
