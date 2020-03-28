@@ -64,6 +64,7 @@ def generate(config: str,
     config_file = Path(config)
     output_dir = None if out is None else Path(out)
     python_binary = Path(sys.executable) if python is None else Path(python)
+
     VenvCtl(config_file=config_file,
             python_binary=python_binary,
             output_dir=output_dir).run()
