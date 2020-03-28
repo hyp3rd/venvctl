@@ -4,7 +4,7 @@
 
 [![pipeline status](https://gitlab.com/hyperd/venvctl/badges/master/pipeline.svg)](https://gitlab.com/hyperd/venvctl/-/commits/master)
 
-![Python package](https://github.com/hyp3rd/venvctl/workflows/Python%20package/badge.svg)
+![Python package](https://github.com/hyp3rd/venvctl/workflows/Python%20package/badge.svg?branch=master)
 
 **venvctl** is a CLI tool allowing the creation of fully **portable Python virtual environments**.
 
