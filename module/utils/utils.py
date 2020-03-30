@@ -99,10 +99,15 @@ class Helpers:
     def packer(venv_path: Path, venv_name: str) -> str:
         """Generate a tarball of the specified virtual environment."""
         builds_path = "{}/builds".format(venv_path)
-        if not os.path.isdir(builds_path):
+        build_tarball_path = "{}/{}.tar.gz".format(builds_path, venv_name)
+
+        if not Path(builds_path).is_dir():
             os.mkdir(builds_path)
 
-        with tarfile.open("{}/{}.tar.gz".format(builds_path, venv_name),
+        if Path(builds_path).is_file():
+            os.remove(build_tarball_path)
+
+        with tarfile.open(build_tarball_path,
                           "w:gz") as tar:
             tar.add("{}/{}".format(venv_path, venv_name),
                     arcname=os.path.basename(
