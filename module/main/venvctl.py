@@ -108,8 +108,12 @@ class VenvCtl:
             [str(self.python_binary),
              "-m", "virtualenv",
              "--activators", "bash,python", "--always-copy", venv_path],
-            check=True,
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            check=True)
+
+        # subprocess.check_output([str(self.python_binary),
+        #                          "-m", "virtualenv",
+        #                          "--activators", "bash,python",
+        #                          "--always-copy", venv_path])
 
         process.check_returncode()
 
