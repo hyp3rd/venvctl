@@ -1,10 +1,8 @@
 # venvctl
 
 [![codecov](https://codecov.io/gl/hyperd/venvctl/branch/master/graph/badge.svg)](https://codecov.io/gl/hyperd/venvctl)
-
 [![pipeline status](https://gitlab.com/hyperd/venvctl/badges/master/pipeline.svg)](https://gitlab.com/hyperd/venvctl/-/commits/master)
-
-![Python package](https://github.com/hyp3rd/venvctl/workflows/Python%20package/badge.svg?branch=master)
+[![security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
 
 **venvctl** is a CLI tool allowing the creation of fully **portable Python virtual environments**.
 
