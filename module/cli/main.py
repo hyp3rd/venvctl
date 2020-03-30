@@ -11,6 +11,7 @@ The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 
 from pathlib import Path
 import sys
+import logging
 from typing import Optional, Dict, List, Any
 import click
 from .options import PythonLiteralOption
@@ -30,7 +31,7 @@ def version_info() -> Dict[str, str]:
         try:
             venvctl_versions[counter] = int(venvctl_versions[counter])
         except Exception:  # pylint: disable=broad-except
-            pass
+            logging.error("I was unable to determine the version")
     if len(venvctl_versions) < 3:
         for counter in range(len(venvctl_versions), 3):
             venvctl_versions.append(0)

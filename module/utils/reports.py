@@ -10,6 +10,7 @@ This module is part of VenvCtl: <https://pypi.org/project/venvctl/>.
 The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 """
 
+import os
 import time
 from pathlib import Path
 from typing import Dict, List
@@ -45,6 +46,10 @@ class Reports:
             if report['output']:
                 markd.add_header(report["title"], 2)
                 markd.add_code(report["output"])
+
+        # If the report already exists, remove it
+        if Path(f'{reports_path}/{venv_name}.md').is_file():
+            os.remove(f'{reports_path}/{venv_name}.md')
 
         markd.save(f'{reports_path}/{venv_name}.md')
 

@@ -14,7 +14,7 @@ The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 
 import os
 import sys
-import subprocess
+import subprocess   # nosec
 from pathlib import Path
 from typing import Any, List, Tuple, Dict, Optional
 import shutil
@@ -95,21 +95,22 @@ class VenvCtl:
                       venv_packages: List[str],
                       parent_path: Optional[Path]) -> Tuple[str, str, int]:
         """Create virtual environment."""
+        # If the virtualenv already exists, remove it
+        if Path(venv_path).is_dir():
+            shutil.rmtree(venv_path)
+
         # If a parent is defined, clone it and install the extra packages
         if parent_path is not None:
             shutil.copytree(src=parent_path, dst=venv_path)
             return self.install_packages(venv_path, venv_packages)
 
-        # If the virtualenv already exists, remove it
-        if Path(venv_path).is_dir():
-            shutil.rmtree(venv_path)
-
+        # Bandit check disabled:
+        # https://github.com/PyCQA/bandit/issues/373
         process = subprocess.run(
             [str(self.python_binary),
              "-m", "virtualenv",
              "--activators", "bash,python", "--always-copy", venv_path],
-            check=True,
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            check=True, shell=False)   # nosec
 
         process.check_returncode()
 
