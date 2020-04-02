@@ -16,6 +16,7 @@ from typing import Optional, Dict, List, Any
 import click
 from .options import PythonLiteralOption
 from ..main.venvctl import VenvCtl
+from ..security.bandit import BnaditScanner
 from ..main.release import __version__
 
 
@@ -90,10 +91,25 @@ def create(name: str, packages: List[str],
     output_dir = None if out is None else Path(out)
     packages_list = packages
 
-    print(packages_list)
-
     VenvCtl.create_venv(name=venv_name, packages=packages_list,
                         output_dir=output_dir)
+
+
+@cli.command(context_settings=dict(help_option_names=['-h', '--help']))
+@click.option('--path', required=True,
+              help='Path to scan with bandit')
+@click.option('--out', required=False, help='Bandit scan output folder')
+def bandit(path: Path,
+           out: Optional[str] = None) -> None:
+    """
+    Create a single virtual environment.
+
+    Creates a virtual env and corresponding reports,
+    initializing it with a list of packages.
+    """
+    venvs_path = path
+    output_dir = None if out is None else Path(out)
+    BnaditScanner.run(venvs_path)
 
 
 def run() -> None:

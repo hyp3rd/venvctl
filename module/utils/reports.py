@@ -31,14 +31,14 @@ class Reports:
         return report
 
     @staticmethod
-    def generate_report(reports_path: Path, venv_name: str,
+    def generate_report(reports_path: Path, report_name: str,
                         reports: List[Dict[str, str]], exitcode: int) -> None:
         """Generate markdown reports."""
         generated_at = time.strftime("%Y:%M:%d - %H:%M")
 
         markd = Markdown()
 
-        markd.add_header(f'{venv_name} {generated_at}')
+        markd.add_header(f'{report_name} {generated_at}')
 
         markd.add_text("Process exited with code {}".format(exitcode))
 
@@ -48,13 +48,13 @@ class Reports:
                 markd.add_code(report["output"])
 
         # If the report already exists, remove it
-        if Path(f'{reports_path}/{venv_name}.md').is_file():
-            os.remove(f'{reports_path}/{venv_name}.md')
+        if Path(f'{reports_path}/{report_name}.md').is_file():
+            os.remove(f'{reports_path}/{report_name}.md')
 
-        markd.save(f'{reports_path}/{venv_name}.md')
+        markd.save(f'{reports_path}/{report_name}.md')
 
     @classmethod
-    def generate_reports(cls, reports_path: Path, venv_name: str,
+    def generate_reports(cls, reports_path: Path, report_name: str,
                          reports: Dict[str, str], exitcode: int) -> None:
         """Parse and generate reports."""
         all_reports = list()
@@ -63,4 +63,4 @@ class Reports:
                 key, val))
 
         cls.generate_report(
-            reports_path, venv_name, all_reports, exitcode)
+            reports_path, report_name, all_reports, exitcode)
