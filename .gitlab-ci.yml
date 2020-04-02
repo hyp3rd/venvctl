@@ -97,11 +97,11 @@ bandit:
   stage: security
   extends: .base-setup
   script:
+    - echo ${COMMIT_TIME}
     - bandit -ir ./module/*
   only:
     - development
     - tags
-    - echo ${COMMIT_TIME}
   # artifacts:
   #   paths:
   #     - ${BUILD_CACHE}/security/bandit/${COMMIT_TIME}
@@ -127,7 +127,6 @@ deploy:
   script:
     - pip3 install twine
     - echo $PYPIRC_INI | base64 -d > .pypirc
-    # - echo $CI_COMMIT_TAG | tee -a ./variables
     - make clean
     - make module
     - make upload
