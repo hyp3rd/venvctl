@@ -98,13 +98,11 @@ bandit:
   extends: .base-setup
   script:
     - echo ${COMMIT_TIME}
+    - echo $(git show -s --format=%ct $CI_COMMIT_SHA)
     - bandit -ir ./module/*
   only:
     - development
     - tags
-  # artifacts:
-  #   paths:
-  #     - ${BUILD_CACHE}/security/bandit/${COMMIT_TIME}
 
 build:
   stage: build
