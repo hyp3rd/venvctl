@@ -38,6 +38,7 @@ license-scanning:
 
 stages:
   - test
+  - security
   - build
   - deploy
 
@@ -91,6 +92,17 @@ coverage:
     - master
   allow_failure: true
 
+# bandit:
+#   stage: security
+#   extends: .base-setup
+#   script:
+#     - echo ${COMMIT_TIME}
+#     - echo $(git show -s --format=%ct $CI_COMMIT_SHA)
+#     - bandit -ir ./module/*
+#   only:
+#     - development
+#     - tags
+
 build:
   stage: build
   extends: .base-setup
@@ -112,7 +124,6 @@ deploy:
   script:
     - pip3 install twine
     - echo $PYPIRC_INI | base64 -d > .pypirc
-    # - echo $CI_COMMIT_TAG | tee -a ./variables
     - make clean
     - make module
     - make upload
