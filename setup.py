@@ -126,6 +126,7 @@ setuptools.setup(
     packages=[
         envstring("NAME"), envstring("NAME") + ".main",
         envstring("NAME"), envstring("NAME") + ".utils",
+        envstring("NAME"), envstring("NAME") + ".security",
         envstring("NAME"), envstring("NAME") + ".cli",
     ],
 
