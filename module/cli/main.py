@@ -99,8 +99,7 @@ def create(name: str, packages: List[str],
 @click.option('--path', required=True,
               help='Path to scan with bandit')
 @click.option('--out', required=False, help='Bandit scan output folder')
-def bandit(path: Path,
-           out: Optional[str] = None) -> None:
+def bandit(path: Path) -> None:
     """
     Create a single virtual environment.
 
@@ -108,7 +107,6 @@ def bandit(path: Path,
     initializing it with a list of packages.
     """
     venvs_path = path
-    output_dir = None if out is None else Path(out)
     BnaditScanner.run(venvs_path)
 
 
