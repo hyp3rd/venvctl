@@ -33,7 +33,7 @@ class BnaditScanner():  # pylint: disable=too-few-public-methods
                         "-m", "bandit",
                         "-r", venvs_path], stdout=PIPE, bufsize=1,
                        universal_newlines=True) as process:
-                for line in process.stdout:
+                for line in process.stdout:   # type: ignore
                     stdout += line
                     print(line, end='')   # nosec
 
