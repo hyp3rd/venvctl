@@ -4,6 +4,7 @@ image: python:latest
 variables:
   BUILD_CACHE: "${CI_PROJECT_DIR}/build_cache"
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  COMMIT_TIME: "$(git show -s --format=%ct $CI_COMMIT_SHA)"
   DS_PYTHON_VERSION: 3
   DS_PIP_VERSION: "20.0.2"
   PIP_REQUIREMENTS_FILE: "requirements.txt"
@@ -38,6 +39,7 @@ license-scanning:
 
 stages:
   - test
+  - security
   - build
   - deploy
 
@@ -90,6 +92,18 @@ coverage:
     - development
     - master
   allow_failure: true
+
+bandit:
+  stage: security
+  extends: .base-setup
+  script:
+    - bandit -ir ./module/*
+  only:
+    - development
+    - tags
+  artifacts:
+    paths:
+      - ${BUILD_CACHE}/security/bandit/${COMMIT_TIME}
 
 build:
   stage: build
