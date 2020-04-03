@@ -67,24 +67,24 @@ For the detailed instructions and a full API walkthroug, refer to the [Official 
 
 You can leverage **venvctl** both programmatically, or calling the CLI, as shown in the examples below:
 
-Build virtual environments in **batch programmatically**
+Build virtual environments in **bulk programmatically**
 
 ```python
 """Python"""
 from venvctl import VenvCtl
 
-# Build virtualenvs in batch
+# Build virtualenvs in bulk
 VenvCtl(config_file=/path/to/config.json,
         python_binary=/usr/bin/python{version},
         output_dir=/my/output/dir).run()
 ```
 
-Build virtual environments in **batch leveraging the CLI**
+Build virtual environments in **bulk leveraging the CLI**
 
 ```bash
 #!/bin/bash
 
-# Build virtualenvs in batch
+# Build virtualenvs in bulk
 venvctl generate \
     --config ~/path/to/your/config/venvs.json \
     --out ./venvs
