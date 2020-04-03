@@ -66,6 +66,8 @@ For the detailed instructions and a full API walkthroug, refer to the [Official 
 
 You can leverage **venvctl** both programmatically, or calling the CLI, as shown in the examples below:
 
+Build virtual environments in **batch programmatically**
+
 ```python
 """Python"""
 from venvctl import VenvCtl
@@ -76,6 +78,8 @@ VenvCtl(config_file=/path/to/config.json,
         output_dir=/my/output/dir).run()
 ```
 
+Build virtual environments in **batch leveraging the CLI**
+
 ```bash
 #!/bin/bash
 
@@ -84,6 +88,8 @@ venvctl generate \
     --config ~/path/to/your/config/venvs.json \
     --out ./venvs
 ```
+
+Build a **single virtual environment programmatically**
 
 ```python
 """Python"""
@@ -101,6 +107,8 @@ VenvCtl.create_venv(name=name, packages=packages_list,
                     output_dir=/my/output/dir)
 ```
 
+Build a **single virtual environment leveraging the CLI**
+
 ```bash
 #!/bin/bash
 
@@ -108,6 +116,8 @@ VenvCtl.create_venv(name=name, packages=packages_list,
 # It will generate the config file for you.
 venvctl create --name my_venv --packages '["tox", "docker"]' --out /my/output/dir
 ```
+
+### Configuration File
 
 A config file follows the json structure:
 
@@ -161,12 +171,16 @@ The build process follows an inheritance pattern, in the example above, the envi
 
 With this logic, the build process in bulk can be quite fast, even when deploying complex virtual environments.
 
+### Bandit Support
+
+The security module exposes an ongoing, more experimental set of features. Introduced with the release [1.3.10], at the current stage exposes a basic [**bandit**](https://pypi.org/project/bandit/)scanner, that generates a **markdown** report file with the same logic as the rest of the **venvctl** features.
+
 ## Run it with Containers
 
 It is possible to take advantage of a [**container image**](https://gitlab.com/hyperd/factory/-/tree/master/python/centos), built to ship **venvctl** and the whole toolchain to create virtual environments leveraging both **Python 2** and **Python 3**.
 Here to follow, two examples running **Docker**.
 
-Build virtual environments in bulk, shipping Python 3.6.8:
+**Build virtual environments in bulk, shipping Python 3.6.8:**
 
 ```bash
 docker run -it --rm -v $(pwd)/conf.json:/opt/conf.json \
@@ -176,7 +190,7 @@ docker run -it --rm -v $(pwd)/conf.json:/opt/conf.json \
   --out /opt/venvs \
 ```
 
-Build virtual environments in bulk, shipping Python 2.7.16:
+**Build virtual environments in bulk, shipping Python 2.7.16:**
 
 ```bash
 docker run -it --rm -v $(pwd)/conf.json:/opt/conf.json \
