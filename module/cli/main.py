@@ -60,7 +60,7 @@ def generate(config: str,
     """
     Generate virtual environments in batch, based on a config file.
 
-    Creates virtual envs and corresponding reports,
+    Creates virtual environments and corresponding reports,
     based on a predefined configuration.
     """
     config_file = Path(config)
@@ -82,9 +82,9 @@ def generate(config: str,
 def create(name: str, packages: List[str],
            out: Optional[str] = None) -> None:
     """
-    Create a single virtual environment.
+    Create a virtual environment.
 
-    Creates a virtual env and corresponding reports,
+    Creates a virtual environment and corresponding reports,
     initializing it with a list of packages.
     """
     venv_name = name
@@ -96,18 +96,17 @@ def create(name: str, packages: List[str],
 
 
 @cli.command(context_settings=dict(help_option_names=['-h', '--help']))
-@click.option('--path', required=True,
-              help='Path to scan with bandit')
-@click.option('--out', required=False, help='Bandit scan output folder')
-def bandit(path: Path) -> None:
+@click.option('--target', required=True,
+              help='Target path to scan')
+def bandit(target: Path) -> None:
     """
-    Create a single virtual environment.
+    Scan a target path with Bandit.
 
-    Creates a virtual env and corresponding reports,
-    initializing it with a list of packages.
+    Processes a target path with Bandit and generates corresponding reports
+    in Markdown format.
     """
-    venvs_path = path
-    BnaditScanner.run(venvs_path)
+    target_path = target
+    BnaditScanner.run(target_path)
 
 
 def run() -> None:
