@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added - 2020-04-03
 
-- Security module now availabe both programmatically and for the CLI.
+- Security module now availabe exposing bandit both programmatically and for the CLI.
 
 ### Changed - 2020-04-03
 

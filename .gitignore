@@ -83,8 +83,8 @@ venvctl
 # find . -type l | sed -e s'/^\.\///g' >> .gitignore
 
 # venvs folder
-python-venvs
-venvs-config
+python-venvs/
+venvs-config/
 
 # other
 playground.*

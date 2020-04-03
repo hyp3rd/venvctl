@@ -3,6 +3,7 @@
 [![codecov](https://codecov.io/gl/hyperd/venvctl/branch/master/graph/badge.svg)](https://codecov.io/gl/hyperd/venvctl)
 [![pipeline status](https://gitlab.com/hyperd/venvctl/badges/master/pipeline.svg)](https://gitlab.com/hyperd/venvctl/-/commits/master)
 [![security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
+![Python package](https://github.com/hyp3rd/venvctl/workflows/Python%20package/badge.svg)
 
 **venvctl** is a CLI tool allowing the creation of fully **portable Python virtual environments**.
 
@@ -173,7 +174,13 @@ With this logic, the build process in bulk can be quite fast, even when deployin
 
 ### Bandit Support
 
-The security module exposes an ongoing, more experimental set of features. Introduced with the release [1.3.10], at the current stage exposes a basic [**bandit**](https://pypi.org/project/bandit/)scanner, that generates a **markdown** report file with the same logic as the rest of the **venvctl** features.
+The security module exposes an ongoing, more experimental set of features. Introduced with the release [1.3.10], at the current stage exposes a basic [**bandit**](https://pypi.org/project/bandit/) scanner, that generates a **markdown** report file as the rest of the **venvctl** features, available in the __reports__ folder, within the virtual environments target path.
+
+Here to follow, an example to trigger a bandit scan from the **CLI**, providing a target folder:
+
+```bash
+venvctl bandit --target ./target-folder
+```
 
 ## Run it with Containers
 
