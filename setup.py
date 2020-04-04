@@ -85,7 +85,7 @@ setuptools.setup(
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
 
-    license='GPLv3',
+    license='GPL-3.0',
 
     author=envstring("AUTHOR"),
     author_email=envstring("AUTHOR_EMAIL"),
@@ -103,13 +103,14 @@ setuptools.setup(
         'Intended Audience :: Developers',
         'Intended Audience :: Information Technology',
         'Intended Audience :: System Administrators',
-        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+        'License :: OSI Approved :: GNU General Public License v3 (GPL-3.0)',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Natural Language :: English',
         'Operating System :: POSIX',
+        "Operating System :: MacOS :: MacOS X"
         'Topic :: Software Development :: Libraries',
         'Topic :: Utilities',
         'Environment :: Plugins',
@@ -129,6 +130,10 @@ setuptools.setup(
         envstring("NAME"), envstring("NAME") + ".utils",
         envstring("NAME"), envstring("NAME") + ".security",
         envstring("NAME"), envstring("NAME") + ".cli",
+    ],
+
+    data_file=[
+        ('/usr/local/etc/bash_completion.d', ['cli/venvctl-bash-complete.sh']),
     ],
 
     entry_points={
