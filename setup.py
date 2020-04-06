@@ -103,7 +103,7 @@ setuptools.setup(
         'Intended Audience :: Developers',
         'Intended Audience :: Information Technology',
         'Intended Audience :: System Administrators',
-        'License :: OSI Approved :: GNU General Public License v3 (GPL-3.0)',
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
@@ -130,10 +130,6 @@ setuptools.setup(
         envstring("NAME"), envstring("NAME") + ".utils",
         envstring("NAME"), envstring("NAME") + ".security",
         envstring("NAME"), envstring("NAME") + ".cli",
-    ],
-
-    data_file=[
-        ('/usr/local/etc/bash_completion.d', ['cli/venvctl-bash-complete.sh']),
     ],
 
     entry_points={
