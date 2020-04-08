@@ -184,7 +184,7 @@ venvctl bandit --target ./target-folder
 
 ## Run it with Containers
 
-It is possible to take advantage of a [**container image**](https://gitlab.com/hyperd/factory/-/tree/master/python/centos), built to ship **venvctl** and the whole toolchain to create virtual environments leveraging both **Python 2** and **Python 3**.
+It is possible to take advantage of a [**container image**](https://gitlab.com/hyperd/factory/-/tree/master/venv-builder/centos), built to ship **venvctl** and the whole toolchain to create virtual environments leveraging both **Python 2** and **Python 3**.
 Here to follow, two examples running **Docker**.
 
 **Build virtual environments in bulk, shipping Python 3.6.8:**
