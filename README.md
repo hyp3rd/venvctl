@@ -219,9 +219,7 @@ More kernels will be added, stay tuned, or feel free to build your own and poke 
 
 ## Report a Vulnerability
 
-If you believe you have found a security vulnerability in **venvctl**, refer to the [Tidelift security policy](https://tidelift.com/docs/security).
-
-The **Tidelift** team will coordinate the vunerability response and disclosure.
+If you believe you have found a security vulnerability in **venvctl**, drop me a line, I will coordinate the vunerability response and disclosure.
 
 ## About the author
 
