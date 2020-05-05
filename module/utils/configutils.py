@@ -10,7 +10,7 @@ The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 """
 
 from __future__ import (absolute_import, division, print_function)
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 from pathlib import Path
 import json
 import errno
@@ -85,29 +85,32 @@ def get_item_by_name(config: List[Any], name: str) -> Any:
     return next((item for item in config if item["name"] == name), None)
 
 
-def validate_config(config: Any) -> bool:
+def validate_config(config: Any) -> Tuple[bool, str]:
     """Validate configuration file."""
     props = valid_properties()
 
     # Ensure that the config object is a list
-    assert isinstance(config, list), ERRORS["INVALID_CONFIG_OBJECT_TYPE"]
+    if not isinstance(config, list):
+        return False, ERRORS["INVALID_CONFIG_OBJECT_TYPE"]
 
     for item in config:
         # Ensure that config items are dictionaries
-        assert isinstance(item, dict), ERRORS["INVALID_CONFIG_ITEM_TYPE"]
+        if not isinstance(item, dict):
+            return False, ERRORS["INVALID_CONFIG_ITEM_TYPE"]
         for key, value in item.items():
             # Ensure config item key is valid
-            assert key in props, ERRORS["INVALID_ITEM_KEY"].replace(
-                "__KEY__", key)
-            assert isinstance(
-                value, props[key]), ERRORS["INVALID_ITEM_PARENT"].replace(
+            if key not in props:
+                return False, ERRORS["INVALID_ITEM_KEY"].replace(
+                    "__KEY__", key)
+            if not isinstance(value, props[key]):
+                return False, ERRORS["INVALID_ITEM_PARENT"].replace(
                     "__KEY__", key).replace("__TYPE__", str(props[key]))
 
             # Ensure that if defined, the parent exists
             if key == "parent":
-                assert get_item_by_name(
-                    config,
-                    value) is not None, ERRORS["INVALID_ITEM_PARENT"].replace(
+                if get_item_by_name(config,
+                                    value) is None:
+                    return False, ERRORS["INVALID_ITEM_PARENT"].replace(
                         "__KEY__", value)
 
-    return True
+    return True, "ALL TESTS PASSED"
