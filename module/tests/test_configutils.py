@@ -116,46 +116,58 @@ class TestMethods(unittest.TestCase):
 
     def test_valid_config(self) -> None:
         """Assert that the config is valid."""
-        self.assertTrue(configutils.validate_config(self.valid_config))
+        valid, _ = configutils.validate_config(self.valid_config)
+        self.assertTrue(valid)
 
     def test_invalid_config_type(self) -> None:
         """Assert that the config type is valid."""
-        with self.assertRaises(AssertionError) as error:
-            configutils.validate_config(self.invalid_config_type)
+        valid, message = configutils.validate_config(self.invalid_config_type)
+        self.assertFalse(valid)
+
         self.assertEqual(
             configutils.ERRORS["INVALID_CONFIG_OBJECT_TYPE"],
-            str(error.exception))
+            str(message))
 
     def test_invalid_config_item_prop(self) -> None:
         """Assert that the config items properties valid."""
-        with self.assertRaises(AssertionError) as error:
-            configutils.validate_config(self.invalid_config_item_prop)
+        valid, _ = configutils.validate_config(
+            self.invalid_config_item_prop)
+        self.assertFalse(valid)
+
+        valid, message = configutils.validate_config(
+            self.invalid_config_item_prop)
+        self.assertFalse(valid)
         self.assertEqual(
             configutils.ERRORS["INVALID_ITEM_KEY"].replace(
                 "__KEY__", "whatever"),
-            str(error.exception))
+            message)
 
     def test_invalid_config_item_prop_type(self) -> None:
         """Assert that the config items property types are valid."""
-        with self.assertRaises(AssertionError):
-            configutils.validate_config(self.invalid_config_item_prop_type)
+        valid, _ = configutils.validate_config(
+            self.invalid_config_item_prop_type)
+        self.assertFalse(valid)
 
     def test_invalid_config_item_type(self) -> None:
         """Assert that the config items type is valid."""
-        with self.assertRaises(AssertionError) as error:
-            configutils.validate_config(self.invalid_config_item_type)
+        valid, message = configutils.validate_config(
+            self.invalid_config_item_type)
+        self.assertFalse(valid)
+
         self.assertEqual(
             configutils.ERRORS["INVALID_CONFIG_ITEM_TYPE"],
-            str(error.exception))
+            message)
 
     def test_invalid_config_item_parent(self) -> None:
         """Assert that the defined parents are valid."""
-        with self.assertRaises(AssertionError) as error:
-            configutils.validate_config(self.invalid_config_item_parent)
+        valid, message = configutils.validate_config(
+            self.invalid_config_item_parent)
+        self.assertFalse(valid)
+
         self.assertEqual(
             configutils.ERRORS["INVALID_ITEM_PARENT"].replace(
                 "__KEY__", "whatever"),
-            str(error.exception))
+            message)
 
     def test_config_is_generated(self) -> None:
         """Assert that a configuration file is generated and is valid."""
@@ -171,9 +183,9 @@ class TestMethods(unittest.TestCase):
         self.assertTrue(Path(config_file).is_file(), "{config} exists.")
 
         config = configutils.get_config(config_file)
-
-        self.assertTrue(configutils.validate_config(
-            config), "{config} is valid")
+        valid = configutils.validate_config(
+            config)
+        self.assertTrue(valid, "{config} is valid")
 
 
 if __name__ == '__main__':
