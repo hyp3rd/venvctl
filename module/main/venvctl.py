@@ -172,9 +172,13 @@ class VenvCtl:
     def run(self) -> None:
         """Run the virtual environments generation."""
         self.venvs = configutils.get_config(self.config_file)
-        try:
-            configutils.validate_config(self.venvs)
-        except AssertionError as error:
-            print(str(error))
-            sys.exit(1)
-        self.__generate_venvs(self.venvs)
+
+        valid_config, validation_message = configutils.validate_config(
+            self.venvs)
+
+        if valid_config:
+            self.__generate_venvs(self.venvs)
+        else:
+            raise Exception(validation_message)
+            # print(str(error))
+            # sys.exit(1)
