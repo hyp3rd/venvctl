@@ -35,7 +35,7 @@ It is possible shipping a virtual environment with a different version of python
 **venvctl** relies on a few packages to explicate its core functionalities:
 
 ```text
-piphyperd==1.9.6
+piphyperd==1.9.8
 ```
 
 [piphyperd](https://gitlab.com/hyperd/piphyperd/), a wrapper around `pip` to manage installations and audits.
@@ -47,7 +47,7 @@ markd==0.1.20
 [markd](https://github.com/pantsel/markd), a Python package that facilitates the generation of markdown flavored files.
 
 ```text
-virtualenv==20.0.20  # Virtual Python Environment builder.
+virtualenv==20.0.23  # Virtual Python Environment builder.
 click8==8.0.1  # Composable command line interface toolkit.
 binaryornot==0.4.4  # Ultra-lightweight pure Python package to check if a file is binary or text.
 ```
