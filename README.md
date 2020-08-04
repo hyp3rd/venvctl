@@ -10,19 +10,7 @@
 
 ## Synopsis
 
-**venvctl** helps to build __fully portable__ Python virtual environments, in **bulk**, or **single** mode, keeping the state in **config files**. Each virtual environment comes with a detailed markdown report, to overview the integrity of its state, broken dependencies, errors, and warnings that occurred in the build process. Eventually, the folders ready for distributions get packed in tarballs, as shown in the example below:
-
-```bash
-...
-│   ...
-│   └── pyvenv.cfg
-├── builds
-│   ├── ansible_2_9.tar.gz
-│   └── base.tar.gz
-└── reports
-    ├── ansible_2_9.md
-    └── base.md
-```
+**venvctl** helps to build __fully portable__ Python virtual environments, in **bulk**, or **single** mode, keeping the state in **config files**. Each virtual environment comes with a detailed markdown report, to overview the integrity of its state, broken dependencies, errors, and warnings that occurred in the build process. Eventually, the folders ready for distributions get packed in tarballs.
 
 ## Limitations
 
