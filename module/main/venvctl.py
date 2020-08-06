@@ -51,7 +51,7 @@ class VenvCtl:
         # path to the python binary to use
         self.python_binary = python_binary if python_binary else sys.executable
         # python version name
-        self.venv_py_ver = f'{os.path.basename(os.path.normpath(Path(self.python_binary)))}'
+        self.venv_py_ver = f'{os.path.basename(os.path.normpath(str(self.python_binary)))}'
 
     @classmethod
     def create_venv(cls, name: str,
