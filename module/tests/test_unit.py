@@ -19,8 +19,8 @@ from pathlib import Path
 from typing import Any
 import glob
 from binaryornot.check import is_binary
-from module.main.venvctl import VenvCtl
-from module.utils import utils, configutils
+from ..main.venvctl import VenvCtl
+from ..utils import utils, configutils
 
 
 class TestMethods(unittest.TestCase):
