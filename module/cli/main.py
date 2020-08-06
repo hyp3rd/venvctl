@@ -17,7 +17,6 @@ from typing import Optional, Dict, List, Any
 import click
 from module.cli.options import PythonLiteralOption
 from module.main.venvctl import VenvCtl
-from module.security.bandit import BnaditScanner
 from module.main.release import __version__
 
 
@@ -94,21 +93,6 @@ def create(name: str, packages: List[str],
 
     VenvCtl.create_venv(name=venv_name, packages=packages_list,
                         output_dir=output_dir)
-
-
-@cli.command(context_settings=dict(help_option_names=['-h', '--help']))
-@click.option('--target', required=True,
-              help='Target path to scan')
-def bandit(target: Path) -> None:
-    """
-    Scan a target path with Bandit.
-
-    Processes a target path with Bandit and generates corresponding reports
-    in Markdown format.
-    """
-    target_path = target
-    BnaditScanner.run(target_path)
-
 
 def run() -> None:
     """Run the CLI."""

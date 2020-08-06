@@ -121,14 +121,12 @@ setuptools.setup(
         'markd==0.1.20',
         'virtualenv==20.0.30',
         'click8==8.0.1',
-        'binaryornot==0.4.4',
-        'bandit==1.6.2',
+        'binaryornot==0.4.4'
     ],
 
     packages=[
         envstring("NAME"), envstring("NAME") + ".main",
         envstring("NAME"), envstring("NAME") + ".utils",
-        envstring("NAME"), envstring("NAME") + ".security",
         envstring("NAME"), envstring("NAME") + ".cli",
     ],
 
