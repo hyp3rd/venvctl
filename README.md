@@ -161,16 +161,6 @@ The build process follows an inheritance pattern, in the example above, the envi
 
 With this logic, the build process in bulk can be quite fast, even when deploying complex virtual environments.
 
-### Bandit Support
-
-The security module exposes an ongoing, more experimental set of features. Introduced with the release [1.3.10], at the current stage exposes a basic [**bandit**](https://pypi.org/project/bandit/) scanner, that generates a **markdown** report file as the rest of the **venvctl** features, available in the __reports__ folder, within the virtual environments target path.
-
-Here to follow, an example to trigger a bandit scan from the **CLI**, providing a target folder:
-
-```bash
-venvctl bandit --target ./target-folder
-```
-
 ## Run it with Containers
 
 It is possible to take advantage of a [**container image**](https://gitlab.com/hyperd/factory/-/tree/master/venv-builder/centos), built to ship **venvctl** and the whole toolchain to create virtual environments leveraging both **Python 2** and **Python 3**.
