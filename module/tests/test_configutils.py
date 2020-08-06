@@ -14,7 +14,7 @@ The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 from __future__ import (absolute_import, division, print_function)
 import unittest
 from pathlib import Path
-from module.utils import configutils
+from ..utils import configutils
 
 
 class TestMethods(unittest.TestCase):

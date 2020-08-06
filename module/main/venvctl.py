@@ -19,7 +19,7 @@ from pathlib import Path
 from typing import Any, List, Tuple, Dict, Optional
 import shutil
 from piphyperd import PipHyperd
-from module.utils import reports, utils, configutils
+from ..utils import reports, utils, configutils
 
 
 class VenvCtl:
