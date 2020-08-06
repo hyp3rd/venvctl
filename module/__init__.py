@@ -1,3 +1,4 @@
 """DO NOT REMOVE THIS."""
-from .main.venvctl import VenvCtl
-from .cli.main import run
+from __future__ import (absolute_import, division, print_function)
+from module.main.venvctl import VenvCtl
+from module.cli.main import run

@@ -14,7 +14,7 @@ import sys
 from subprocess import Popen, PIPE, CalledProcessError   # nosec
 from pathlib import Path
 from typing import Any, Dict, Tuple
-from ..utils import reports
+from module.utils import reports
 
 
 class BnaditScanner():  # pylint: disable=too-few-public-methods
