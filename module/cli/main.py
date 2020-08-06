@@ -9,15 +9,16 @@ This module is part of VenvCtl: <https://pypi.org/project/venvctl/>.
 The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 """
 
+from __future__ import (absolute_import, division, print_function)
 from pathlib import Path
 import sys
 import logging
 from typing import Optional, Dict, List, Any
 import click
-from .options import PythonLiteralOption
-from ..main.venvctl import VenvCtl
-from ..security.bandit import BnaditScanner
-from ..main.release import __version__
+from module.cli.options import PythonLiteralOption
+from module.main.venvctl import VenvCtl
+from module.security.bandit import BnaditScanner
+from module.main.release import __version__
 
 
 def version_info() -> Dict[str, str]:

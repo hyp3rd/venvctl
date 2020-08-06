@@ -15,8 +15,8 @@ from pathlib import Path
 import json
 import errno
 import os
-from ..utils import utils
-from ..main.venv import Venv
+from module.utils import utils
+from module.main.venv import Venv
 
 ERRORS = {
     "INVALID_CONFIG_OBJECT_TYPE": "The configuration object must be a list",

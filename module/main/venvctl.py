@@ -19,7 +19,7 @@ from pathlib import Path
 from typing import Any, List, Tuple, Dict, Optional
 import shutil
 from piphyperd import PipHyperd
-from ..utils import reports, utils, configutils
+from module.utils import reports, utils, configutils
 
 
 class VenvCtl:
@@ -50,6 +50,8 @@ class VenvCtl:
         self.venvs: List[Any] = []
         # path to the python binary to use
         self.python_binary = python_binary if python_binary else sys.executable
+        # python version name
+        self.venv_py_ver = f'{os.path.basename(os.path.normpath(Path(self.python_binary)))}'
 
     @classmethod
     def create_venv(cls, name: str,
@@ -123,20 +125,21 @@ class VenvCtl:
         return install_report, install_errors, exitcode
 
     def __generate_venv(self, venv: Any) -> None:
-        venv_path = Path(f'{self.venvs_path}/{venv["name"]}')
+        venv_name = f'{venv["name"]}_{self.venv_py_ver}'
+        venv_path = Path(f'{self.venvs_path}/{venv_name}')
         parent_path = None
 
         if "parent" in venv:
-            parent_path = Path(f'{self.venvs_path}/{venv["parent"]}')
+            parent_path = Path(f'{self.venvs_path}/{venv["parent"]}_{self.venv_py_ver}')
 
         install_report, install_errors, exitcode = self.__create_venv(
             venv_path, venv["packages"], parent_path)
 
         pip_freeze_report, pip_check_report, pip_outdated_report = self.audit(
-            Path(f'{self.venvs_path}/{venv["name"]}'))
+            Path(f'{self.venvs_path}/{venv_name}'))
 
         build_report = utils.Helpers().packer(
-            self.venvs_path, str(venv["name"]))
+            self.venvs_path, str(venv_name))
 
         reports_map: Dict[str, str] = {
             "Installation report": install_report,
@@ -149,7 +152,7 @@ class VenvCtl:
 
         reports.Reports().generate_reports(
             Path(f'{self.venvs_path}/reports'),
-            venv["name"], reports_map, exitcode)
+            venv_name, reports_map, exitcode)
 
     def __ensure_parent_venv_is_present(self, venv: Any) -> None:
         """Ensure that the prerequisite parent venv is present."""
