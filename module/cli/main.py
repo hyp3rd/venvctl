@@ -15,9 +15,9 @@ import sys
 import logging
 from typing import Optional, Dict, List, Any
 import click
-from module.cli.options import PythonLiteralOption
-from module.main.venvctl import VenvCtl
-from module.main.release import __version__
+from ..cli.options import PythonLiteralOption
+from ..main.venvctl import VenvCtl
+from ..main.release import __version__
 
 
 def version_info() -> Dict[str, str]:
