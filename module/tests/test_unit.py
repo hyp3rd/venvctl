@@ -44,7 +44,7 @@ class TestMethods(unittest.TestCase):
         """Test setup."""
         self.venvctl = VenvCtl(
             config_file=self.get_config_file())
-        self.py_ver = f'{os.path.basename(os.path.normpath(sys.executable))}'
+        # self.py_ver = f'{os.path.basename(os.path.normpath(sys.executable))}'
 
     def test_a_is_not_none(self) -> None:
         """Assert that venvctl is not None."""
@@ -65,14 +65,14 @@ class TestMethods(unittest.TestCase):
         """Assert that each venv contains the expected packages."""
         for venv in self.get_venvs_config():
             pip_freeze_report, _, _ = self.venvctl.audit(
-                Path(f'{self.get_venv_base_path()}/{venv["name"]}_{self.py_ver}'))  # pylint: disable=line-too-long
+                Path(f'{self.get_venv_base_path()}/{venv["name"]}'))  # pylint: disable=line-too-long
             for package in venv['packages']:
                 self.assertIn(package, pip_freeze_report)
 
     def test_e_activate_fix(self) -> None:
         """Assert that the bash activate fix is applied."""
         for venv in self.get_venvs_config():
-            current_path = f'{self.get_venv_base_path()}/{venv["name"]}_{self.py_ver}'  # pylint: disable=line-too-long
+            current_path = f'{self.get_venv_base_path()}/{venv["name"]}'  # pylint: disable=line-too-long
             with open(f'{current_path}/bin/activate', 'r') as file:
                 verify = (utils.Helpers().get_bash_activation_fix()
                           in file.read())
@@ -82,7 +82,7 @@ class TestMethods(unittest.TestCase):
     def test_f_shebang_fix(self) -> None:
         """Assert that the shebang fix is applied."""
         for venv in self.get_venvs_config():
-            target_path = f'{self.get_venv_base_path()}/{venv["name"]}_{self.py_ver}/bin'  # pylint: disable=line-too-long
+            target_path = f'{self.get_venv_base_path()}/{venv["name"]}/bin'  # pylint: disable=line-too-long
             for child in glob.glob(
                     f'{target_path}/**/easy*', recursive=True):
                 if os.path.isdir(child) or is_binary(str(child)):
@@ -97,7 +97,7 @@ class TestMethods(unittest.TestCase):
         """Assert that the reports are generated in the correct folder."""
         target_path = f'{self.get_venv_base_path()}/reports'
         for venv in self.get_venvs_config():
-            test_is_file = Path(f'{target_path}/{venv["name"]}_{self.py_ver}.md').is_file()  # pylint: disable=line-too-long
+            test_is_file = Path(f'{target_path}/{venv["name"]}.md').is_file()  # pylint: disable=line-too-long
             self.assertTrue(test_is_file)
 
     def test_f_single_venv_creation(self) -> None:
@@ -112,11 +112,11 @@ class TestMethods(unittest.TestCase):
         VenvCtl.create_venv(name=name, packages=packages)
 
         # test venv is created
-        self.assertTrue(os.path.isdir(f'{venv_path}_{self.py_ver}'))
+        self.assertTrue(os.path.isdir(f'{venv_path}'))
 
         # venv integrity test
         pip_freeze_report, _, _ = self.venvctl.audit(
-            Path(f'{venv_path}_{self.py_ver}'))
+            Path(f'{venv_path}'))
         for package in packages:
             self.assertIn(package, pip_freeze_report)
 

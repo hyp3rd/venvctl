@@ -51,7 +51,7 @@ class VenvCtl:
         # path to the python binary to use
         self.python_binary = python_binary if python_binary else sys.executable
         # python version name
-        self.venv_py_ver = f'{os.path.basename(os.path.normpath(str(self.python_binary)))}'
+        # self.venv_py_ver = f'{os.path.basename(os.path.normpath(str(self.python_binary)))}'
 
     @classmethod
     def create_venv(cls, name: str,
@@ -125,12 +125,13 @@ class VenvCtl:
         return install_report, install_errors, exitcode
 
     def __generate_venv(self, venv: Any) -> None:
-        venv_name = f'{venv["name"]}_{self.venv_py_ver}'
+        # venv_name = f'{venv["name"]}_{self.venv_py_ver}'
+        venv_name = f'{venv["name"]}'
         venv_path = Path(f'{self.venvs_path}/{venv_name}')
         parent_path = None
 
         if "parent" in venv:
-            parent_path = Path(f'{self.venvs_path}/{venv["parent"]}_{self.venv_py_ver}')
+            parent_path = Path(f'{self.venvs_path}/{venv["parent"]}')
 
         install_report, install_errors, exitcode = self.__create_venv(
             venv_path, venv["packages"], parent_path)
