@@ -61,6 +61,8 @@ unit:
     - python -m module.tests.test_configutils
   only:
     - development
+  needs:
+    - job: pylint
 
 coverage:
   stage: test
