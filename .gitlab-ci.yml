@@ -10,7 +10,7 @@ variables:
   BUILD_CACHE: "${CI_PROJECT_DIR}/build_cache"
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   DS_PYTHON_VERSION: 3
-  DS_PIP_VERSION: "20.0.2"
+  DS_PIP_VERSION: "20.2.3"
   PIP_REQUIREMENTS_FILE: "requirements.txt"
   SAST_DEFAULT_ANALYZERS: "bandit"
   SAST_DISABLE_DIND: "true"
@@ -51,7 +51,7 @@ code-quality:
     - mypy --strict module/utils/*.py
     - mypy --strict module/cli/*.py
     - mypy --strict module/tests/test_*.py
-  allow_failure: true
+  allow_failure: false
 
 unit:
   stage: test

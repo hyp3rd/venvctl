@@ -12,7 +12,6 @@ The code is available on GitLab: <https://gitlab.com/hyperd/venvctl>.
 """
 
 from __future__ import (absolute_import, division, print_function)
-import sys
 import unittest
 import os
 from pathlib import Path
