@@ -108,6 +108,7 @@ setuptools.setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
         'Natural Language :: English',
         'Operating System :: POSIX',
         'Operating System :: MacOS :: MacOS X',
@@ -119,7 +120,7 @@ setuptools.setup(
     install_requires=[
         'piphyperd==1.9.8',
         'markd==0.1.20',
-        'virtualenv==20.0.35',
+        'virtualenv==20.2.2',
         'click8==8.0.1',
         'binaryornot==0.4.4'
     ],
