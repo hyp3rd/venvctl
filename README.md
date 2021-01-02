@@ -23,7 +23,7 @@ It is possible shipping a virtual environment with a different version of python
 **venvctl** relies on a few packages to explicate its core functionalities:
 
 ```text
-piphyperd==1.9.8
+piphyperd==1.9.10
 ```
 
 [piphyperd](https://gitlab.com/hyperd/piphyperd/), a wrapper around `pip` to manage installations and audits.
