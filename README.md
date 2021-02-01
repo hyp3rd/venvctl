@@ -35,7 +35,7 @@ markd==0.1.20
 [markd](https://github.com/pantsel/markd), a Python package that facilitates the generation of markdown flavored files.
 
 ```text
-virtualenv==20.4.0  # Virtual Python Environment builder.
+virtualenv==20.4.2  # Virtual Python Environment builder.
 click8==8.0.1  # Composable command line interface toolkit.
 binaryornot==0.4.4  # Ultra-lightweight pure Python package to check if a file is binary or text.
 ```
